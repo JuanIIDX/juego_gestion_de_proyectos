@@ -16,6 +16,7 @@ export interface LevelCard {
   border: string;
   context?: string;
   isTest?: boolean;
+  image?: string;
 }
 
 const LEVELS: LevelCard[] = [
@@ -25,6 +26,7 @@ const LEVELS: LevelCard[] = [
     displayTitle: 'Panadería',
     color: 'linear-gradient(145deg,#1a3a1a,#0d2010)',
     border: '#22c55e',
+    image: 'images/character/1.png',
     context: 'La panadería "El Trigo Dorado" ha sido durante más de quince años uno de los negocios más reconocidos de su barrio. Sus productos siempre han sido apreciados por los habitantes de la zona debido a su calidad y sabor tradicional. Sin embargo, durante los últimos seis meses, los propietarios han observado una disminución constante en las ventas. Cada vez ingresan menos clientes al establecimiento y muchos de los compradores habituales ya no realizan sus compras con la misma frecuencia. Al mismo tiempo, han aparecido nuevos competidores que ofrecen pedidos por internet, servicio a domicilio y una fuerte presencia en redes sociales. Los dueños de la panadería están preocupados porque, aunque mantienen la misma calidad en sus productos, los ingresos continúan disminuyendo y no tienen claridad sobre las verdaderas razones que están provocando esta situación.',
   },
   {
@@ -33,6 +35,7 @@ const LEVELS: LevelCard[] = [
     displayTitle: 'Bebida Natural',
     color: 'linear-gradient(145deg,#1a2a3a,#0d1520)',
     border: '#3b82f6',
+    image: 'images/character/2.png',
     context: 'Una empresa dedicada a la producción de alimentos saludables ha desarrollado una nueva bebida energética elaborada con ingredientes naturales y sin conservantes artificiales. Los directivos consideran que el producto tiene un gran potencial, especialmente entre estudiantes universitarios, deportistas y personas que buscan alternativas más saludables a las bebidas energéticas tradicionales. Sin embargo, antes de invertir una gran cantidad de dinero en producción, distribución y publicidad, la empresa enfrenta varias incertidumbres. No sabe si los consumidores realmente están interesados en este tipo de bebida, cuáles son los sabores que prefieren, cuánto estarían dispuestos a pagar y qué tan fuerte es la competencia en este segmento del mercado. Además, existe el riesgo de lanzar un producto que no logre aceptación suficiente y genere pérdidas económicas significativas.',
   },
   {
@@ -49,6 +52,7 @@ const LEVELS: LevelCard[] = [
     displayTitle: 'Café',
     color: 'linear-gradient(145deg,#3a2a1a,#20150d)',
     border: '#f97316',
+    image: 'images/character/4.png',
     context: 'Una empresa dedicada a la producción y comercialización de café premium ha logrado consolidarse exitosamente en su ciudad de origen. Gracias a la calidad de sus productos y a una sólida base de clientes, los directivos consideran que ha llegado el momento de expandir sus operaciones hacia una nueva ciudad ubicada en otra región del país. Sin embargo, desconocen los hábitos de consumo de los habitantes de esa zona, las marcas preferidas por los consumidores, el nivel de competencia existente y las diferencias culturales que podrían influir en las decisiones de compra. Además, la expansión requerirá inversiones importantes en logística, distribución, personal y publicidad. La empresa necesita tomar una decisión informada para evitar riesgos que puedan comprometer los recursos acumulados durante años de trabajo.',
   },
   {
@@ -57,6 +61,7 @@ const LEVELS: LevelCard[] = [
     displayTitle: 'Tienda Deportiva',
     color: 'linear-gradient(145deg,#3a1a1a,#200d0d)',
     border: '#ef4444',
+    image: 'images/character/5.png',
     context: 'Una tienda especializada en artículos deportivos decidió realizar una importante inversión en publicidad digital con el objetivo de aumentar sus ventas y fortalecer el reconocimiento de su marca. Durante varias semanas se publicaron anuncios en redes sociales, plataformas de video y diferentes sitios web. Los reportes mostraron que miles de personas visualizaron la publicidad e interactuaron con los anuncios. Sin embargo, al finalizar la campaña, los propietarios descubrieron que las ventas apenas habían aumentado y que el retorno de la inversión era mucho menor de lo esperado. Aunque aparentemente la publicidad logró captar la atención de muchas personas, los resultados comerciales no fueron satisfactorios. Ahora la empresa necesita comprender qué factores pudieron haber influido en este desempeño y cómo mejorar futuras estrategias de marketing.',
   },
   {
@@ -65,6 +70,7 @@ const LEVELS: LevelCard[] = [
     displayTitle: 'Supermercado',
     color: 'linear-gradient(145deg,#3a3a1a,#1a1a0d)',
     border: '#eab308',
+    image: 'images/character/6.png',
     context: 'Un supermercado local que ha servido a su comunidad durante más de una década enfrenta un desafío importante. Recientemente, una reconocida cadena nacional abrió una nueva sucursal a pocas cuadras de distancia. La nueva tienda cuenta con instalaciones modernas, amplios horarios de atención, una gran variedad de productos y agresivas promociones de lanzamiento. Desde la apertura de esta nueva competencia, el supermercado local ha comenzado a notar una disminución progresiva en el número de clientes y en el volumen de ventas. Muchos consumidores han decidido probar la nueva alternativa atraídos por las ofertas y la novedad del establecimiento. Los propietarios del supermercado local están preocupados por el futuro del negocio y necesitan encontrar estrategias que les permitan mantener su participación en el mercado y conservar la fidelidad de sus clientes habituales.',
   },
   { id: 7, title: 'Test',                color: 'linear-gradient(145deg,#1a1a2e,#0f0f1a)', border: '#94a3b8', isTest: true },
@@ -72,12 +78,12 @@ const LEVELS: LevelCard[] = [
 
 // Cada string reemplaza al anterior — sin historial
 const GREETING_LINES: string[] = [
-  'Bienvenido al stand de Gestión de Mercados.',
-  'Es un honor contar con tu presencia en esta actividad.',
-  'Selecciona el nivel con el que deseas iniciar tu desafío.',
+  'Bienvenido a nuestro stand de Gestión de Mercados.',
+  'En esta actividad haremos unas preguntas en base a la situacion que escojas',
+  'Tranquilo, no sera tan dificil',
 ];
 
-const LEVEL_SELECT_LINE = '¿Cuál nivel deseas enfrentar hoy?';
+const LEVEL_SELECT_LINE = 'Escoje algun personaje y analiza su situacion detenidamente';
 
 @Component({
   selector: 'app-home-intro',
@@ -177,13 +183,13 @@ export class HomeIntro implements OnInit, OnDestroy {
   // level-select → character/
   characterImage = computed(() => {
     const ph = this.phase();
-    if (ph === 'level-select') return 'images/character/character.png';
+    if (ph === 'level-select') return 'images/intro/3.png';
     if (ph === 'greeting') {
       return this.currentLineIndex() <= 1
-        ? 'images/intro/intro.png'
-        : 'images/thinking/thinking.png';
+        ? 'images/intro/1.png'
+        : 'images/intro/2.png';
     }
-    return 'images/intro/intro.png';
+    return 'images/intro/1.png';
   });
 
   fireParticles = Array.from({ length: 30 }, () => ({

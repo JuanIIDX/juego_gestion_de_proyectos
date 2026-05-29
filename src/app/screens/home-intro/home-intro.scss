@@ -12,54 +12,57 @@
   cursor: default;
   transition: background 1.2s ease;
 
-  /* ── Tema día: intro y selección de nivel ── */
+  /* ── Tema atardecer oscuro: intro y selección de nivel ── */
   &.theme-day {
-    background: linear-gradient(160deg, #e8f4fd 0%, #c8e6f5 30%, #a8d8ea 60%, #78c4e0 100%);
+    background: linear-gradient(170deg, #0d0a1a 0%, #1a0d2e 18%, #2d1040 35%, #4a1628 52%, #6b2020 68%, #8b3a18 82%, #a05010 95%, #b06020 100%);
 
-    /* Estrellas más tenues — simulan nubes o partículas de luz */
-    .stars-1, .stars-2, .stars-3 { opacity: 0.12; }
+    /* Estrellas visibles — el cielo ya oscurece */
+    .stars-1, .stars-2, .stars-3 { opacity: 0.45; }
 
-    /* Nebulosas se convierten en manchas de luz cálida */
+    /* Nebulosas: tonos cálidos del atardecer */
     .nebula-1 {
-      background: radial-gradient(ellipse, rgba(255,220,100,0.35), transparent 70%);
-      filter: blur(60px);
-      opacity: 0.8;
+      background: radial-gradient(ellipse, rgba(220,80,20,0.45), transparent 70%);
+      filter: blur(70px);
+      opacity: 0.9;
     }
     .nebula-2 {
-      background: radial-gradient(ellipse, rgba(255,180,80,0.25), transparent 70%);
-      filter: blur(80px);
-      opacity: 0.7;
+      background: radial-gradient(ellipse, rgba(160,40,80,0.4), transparent 70%);
+      filter: blur(90px);
+      opacity: 0.8;
     }
     .nebula-3 {
-      background: radial-gradient(ellipse, rgba(255,255,200,0.3), transparent 70%);
-      filter: blur(50px);
-      opacity: 0.6;
+      background: radial-gradient(ellipse, rgba(255,140,30,0.3), transparent 70%);
+      filter: blur(60px);
+      opacity: 0.7;
     }
 
-    /* Grid de perspectiva más sutil en día */
+    /* Grid con tono cálido tenue */
     &::before {
       background:
-        linear-gradient(rgba(0,80,160,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,80,160,0.06) 1px, transparent 1px);
+        linear-gradient(rgba(180,60,10,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180,60,10,0.07) 1px, transparent 1px);
     }
 
-    /* Burbujas de texto con contraste para fondo claro */
+    /* Burbujas de texto — fondo oscuro cálido con buen contraste */
     .speech-bubble {
-      background: rgba(255,255,255,0.96);
-      box-shadow: 10px 10px 0 rgba(0,60,120,0.25);
-      border-color: rgba(0,60,120,0.4);
+      background: rgba(20,10,5,0.92);
+      box-shadow: 8px 8px 0 rgba(180,60,10,0.45);
+      border-color: rgba(200,90,20,0.7);
     }
-    .bubble-line { color: #0a1a2e; }
-    .cursor { color: #0066cc; }
+    .bubble-line { color: #f5e0c0; }
+    .cursor { color: #f97316; }
     .tail-down {
-      border-top-color: rgba(0,60,120,0.4);
-      &::after { border-top-color: rgba(255,255,255,0.96); }
+      border-top-color: rgba(200,90,20,0.7);
+      &::after { border-top-color: rgba(20,10,5,0.92); }
     }
     .tail-right {
-      border-left-color: rgba(0,60,120,0.4);
-      &::after { border-left-color: rgba(255,255,255,0.96); }
+      border-left-color: rgba(200,90,20,0.7);
+      &::after { border-left-color: rgba(20,10,5,0.92); }
     }
-    .prompt-dots span { background: #0066cc; }
+    .prompt-dots span { background: #f97316; }
+
+    /* Título de selección de nivel */
+    .level-title { color: #f5e0c0; text-shadow: 0 0 30px rgba(220,100,20,0.4); }
   }
 }
 
@@ -294,13 +297,11 @@
 /* ── Imagen del personaje ── */
 .character-img {
   width: 240px;
-  height: 360px;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 6px 6px 0 0;
+  height: 343px;   /* 240 × (1000/700) */
+  object-fit: contain;
+  object-position: bottom center;
   flex-shrink: 0;
   display: block;
-  /* Sombra suave debajo para que no flote */
   filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
   transition: filter 0.4s;
 
@@ -312,10 +313,9 @@
 
 .character-img--side {
   width: 220px;
-  height: 330px;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 6px 6px 0 0;
+  height: 314px;   /* 220 × (1000/700) */
+  object-fit: contain;
+  object-position: bottom center;
   flex-shrink: 0;
   display: block;
   filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
@@ -488,9 +488,9 @@
   z-index: 2;
 }
 
-/* Cartas (68% izq) */
+/* Cartas (58% izq) */
 .cards-area {
-  flex: 0 0 68%;
+  flex: 0 0 58%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -568,6 +568,23 @@
   .level-card:hover & { opacity: 0.55; }
 }
 
+/* Imagen del personaje dentro del card */
+.card-character {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  object-fit: contain;
+  object-position: bottom center;
+  border-radius: 10px 10px 0 0;
+  display: block;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+  transition: transform 0.25s, filter 0.25s;
+  .level-card:hover & {
+    transform: scale(1.04) translateY(-4px);
+    filter: drop-shadow(0 8px 20px rgba(0,0,0,0.7));
+  }
+}
+
 .card-title {
   font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 900;
   color: #fff; letter-spacing: 0.04em; text-shadow: 0 2px 8px rgba(0,0,0,0.5);
@@ -608,7 +625,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 820px;
+  max-width: 980px;
   max-height: 85vh;
   overflow: hidden;
   position: relative;
@@ -667,6 +684,16 @@
   opacity: 0.75;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
   flex-shrink: 0;
+}
+
+/* Personaje en el modal de contexto */
+.ctx-character {
+  width: 190px;
+  flex-shrink: 0;
+  align-self: stretch;
+  object-fit: contain;
+  object-position: bottom center;
+  filter: drop-shadow(0 8px 28px rgba(0,0,0,0.6));
 }
 
 /* Texto del contexto */
@@ -730,9 +757,9 @@
   }
 }
 
-/* Personaje (32% der) */
+/* Personaje (42% der) */
 .announcer-area {
-  flex: 0 0 32%;
+  flex: 0 0 42%;
   display: flex;
   flex-direction: row;   /* [burbuja][cola][personaje] */
   align-items: flex-end;
@@ -747,6 +774,6 @@
   align-self: flex-end;
   margin-bottom: 180px;
   flex-shrink: 0;
-  max-width: 250px;
+  max-width: 380px;
   z-index: 10;
 }

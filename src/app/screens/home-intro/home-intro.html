@@ -108,8 +108,11 @@
 
               <!-- Contenido normal del card -->
               <div class="card-content">
-                <!-- Cuadrado de color (placeholder para imagen futura) -->
-                <div class="card-image-placeholder" [style.background]="level.border"></div>
+                @if (level.image) {
+                  <img class="card-character" [src]="level.image" [alt]="level.title" />
+                } @else {
+                  <div class="card-image-placeholder" [style.background]="level.border"></div>
+                }
                 <!-- Título abajo -->
                 <div class="card-title">{{ level.title }}</div>
               </div>
@@ -157,8 +160,12 @@
 
         <!-- Cuerpo: imagen izquierda + texto derecha -->
         <div class="ctx-body">
-          <!-- Placeholder imagen (cuadrado del color del nivel) -->
-          <div class="ctx-image" [style.background]="expandedCard()!.border"></div>
+          <!-- Imagen del personaje del nivel -->
+          @if (expandedCard()!.image) {
+            <img class="ctx-character" [src]="expandedCard()!.image" [alt]="expandedCard()!.title" />
+          } @else {
+            <div class="ctx-image" [style.background]="expandedCard()!.border"></div>
+          }
 
           <!-- Texto del contexto -->
           <div class="ctx-text">

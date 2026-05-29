@@ -205,11 +205,12 @@
       }
     </div>
 
-    <!-- Cuadrado verde -->
-    <div class="announcer-square"
+    <!-- Personaje del nivel -->
+    <img class="announcer-character"
+      [src]="announcerImage"
       [class.announcer--correct]="lastCorrect() === true"
-      [class.announcer--wrong]="lastCorrect() === false">
-    </div>
+      [class.announcer--wrong]="lastCorrect() === false"
+      alt="Personaje" />
 
   </div>
 

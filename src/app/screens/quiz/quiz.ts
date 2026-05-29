@@ -865,6 +865,10 @@ export class Quiz implements OnInit, OnDestroy {
   @Output() exit = new EventEmitter<void>();
   @Output() spaceModeChange = new EventEmitter<'fast' | 'faster' | 'chaos'>();
 
+  get announcerImage(): string {
+    return `images/thinking/${this.levelId}.png`;
+  }
+
   questions: QuizQuestion[] = [];
   totalQuestions = 0;
   timerTotal = TIMER_SECONDS;
