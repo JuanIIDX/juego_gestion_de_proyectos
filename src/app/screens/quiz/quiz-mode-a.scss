@@ -256,3 +256,23 @@
   0%,100% { box-shadow: 0 0 20px rgba(220,38,38,0.7), 0 0 40px rgba(220,38,38,0.4), 0 4px 16px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2); }
   50%     { box-shadow: 0 0 30px rgba(220,38,38,0.9), 0 0 60px rgba(220,38,38,0.6), 0 4px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2); }
 }
+
+@media (max-height: 620px) and (orientation: landscape) {
+  .mode-a { gap: 0.5rem; }
+
+  .panels-row { min-height: 160px; }
+
+  .panel { padding: 0.5rem 0.8rem 0.7rem; }
+
+  .panel-letter { font-size: 5rem; }
+
+  .panel-label { font-size: 0.9rem; margin-bottom: 0.2rem; }
+
+  .answer-chip { width: auto; }
+
+  .chip-text { font-size: 0.9rem; }
+
+  .chip-btn { width: 36px; height: 36px; font-size: 1rem; }
+
+  .ok-btn { width: 70px; height: 48px; font-size: 1.4rem; }
+}

@@ -333,8 +333,8 @@
 ═══════════════════════════════════════ */
 /* ── Imagen del personaje ── */
 .character-img {
-  width: 240px;
-  height: 343px;   /* 240 × (1000/700) */
+  width: clamp(100px, 30vh, 240px);
+  height: auto;
   object-fit: contain;
   object-position: bottom center;
   flex-shrink: 0;
@@ -349,8 +349,8 @@
 }
 
 .character-img--side {
-  width: 220px;
-  height: 314px;   /* 220 × (1000/700) */
+  width: clamp(90px, 28vh, 220px);
+  height: auto;
   object-fit: contain;
   object-position: bottom center;
   flex-shrink: 0;
@@ -395,7 +395,7 @@
 
 .bubble-line {
   font-family: 'Georgia', serif;
-  font-size: 1.9rem;
+  font-size: clamp(1rem, 3.5vh, 1.9rem);
   font-weight: 600;
   color: #1a0a00;
   line-height: 1.55;
@@ -406,6 +406,13 @@
   font-size: 1.3rem;
   min-height: 2rem;
   line-height: 1.5;
+}
+
+/* Línea de sugerencia de orientación — destacada pero no intrusiva */
+.bubble-line--hint {
+  font-size: 1.5rem;
+  color: #f97316;
+  text-align: center;
 }
 
 .cursor {
@@ -475,7 +482,7 @@
 
 .bubble-center {
   position: absolute;
-  bottom: 385px;
+  bottom: clamp(150px, 55vh, 385px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -541,7 +548,7 @@
 .level-header { text-align: center; }
 .level-title {
   font-family: 'Georgia', serif;
-  font-size: 2.2rem; font-weight: 900; color: #fff;
+  font-size: clamp(1.1rem, 3.5vh, 2.2rem); font-weight: 900; color: #fff;
   margin: 0 0 0.3rem; letter-spacing: 0.04em;
   text-shadow: 0 0 30px rgba(255,255,255,0.2);
 }
@@ -809,8 +816,109 @@
   flex-direction: row;
   align-items: center;
   align-self: flex-end;
-  margin-bottom: 180px;
+  margin-bottom: clamp(60px, 26vh, 180px);
   flex-shrink: 0;
-  max-width: 380px;
+  max-width: clamp(180px, 30vw, 380px);
   z-index: 10;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — LANDSCAPE MÓVIL
+   El personaje y burbuja se adaptan con clamp() arriba.
+   Solo queda reorganizar el layout de columna→fila
+   en pantallas muy bajas.
+═══════════════════════════════════════ */
+@media (max-height: 620px) and (orientation: landscape) {
+
+  /* --- Fase saludo: personaje derecha fijo, burbuja a su izquierda --- */
+  .greeting-layout {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 0;
+  }
+
+  /* Personaje pegado abajo-derecha, igual que en desktop */
+  .announcer-center {
+    position: static;
+    transform: none;
+    flex-shrink: 0;
+    align-self: flex-end;
+  }
+
+  /* Burbuja: absoluta, anclada encima del personaje a la izquierda */
+  .bubble-center {
+    position: absolute;
+    bottom: clamp(80px, 20vh, 140px); /* encima del personaje */
+    right: clamp(80px, 18vw, 160px);  /* alineada con el personaje */
+    left: unset;
+    transform: none;
+    width: clamp(200px, 45vw, 360px);
+    align-items: flex-end;
+  }
+
+  /* Cola apunta hacia abajo-derecha (hacia el personaje) */
+  .tail-down {
+    align-self: flex-end;
+    margin-right: clamp(10px, 4vw, 30px);
+  }
+
+  .tap-hint {
+    position: absolute;
+    bottom: clamp(80px, 20vh, 140px);
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  /* Personaje más pequeño en landscape */
+  .greeting-layout .character-img {
+    width: clamp(80px, 18vh, 130px);
+  }
+
+  /* Texto de burbuja más compacto */
+  .bubble-center .bubble-line {
+    font-size: clamp(0.9rem, 2.2vh, 1.3rem);
+  }
+
+  /* --- Fase selección de nivel --- */
+  .cards-area {
+    padding: 0.4rem 0.4rem 0.4rem 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .cards-grid { gap: 0.4rem; }
+
+  .card-title {
+    font-size: 0.7rem;
+    margin-top: 0.2rem;
+  }
+
+  .announcer-area {
+    flex: 0 0 clamp(120px, 22vw, 180px);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4rem 0.4rem 0.4rem 0;
+    gap: 0.3rem;
+  }
+
+  .bubble-side {
+    margin-bottom: 0;
+    max-width: clamp(130px, 20vw, 200px);
+    flex-direction: column;
+    align-items: center;
+    align-self: center;
+  }
+
+  .announcer-area .tail-right { display: none; }
+
+  .bubble-line--small { text-align: center; }
+
+  /* --- Modal de contexto --- */
+  .ctx-backdrop { padding: 0.4rem; }
+  .ctx-modal { max-height: 96vh; max-width: 100%; }
+  .ctx-header { padding: 0.6rem 0.9rem 0.4rem; }
+  .ctx-body { padding: 0.6rem 0.9rem; gap: 0.7rem; }
+  .ctx-character { width: clamp(80px, 14vh, 140px); }
+  .ctx-footer { padding: 0.5rem 0.9rem; }
 }

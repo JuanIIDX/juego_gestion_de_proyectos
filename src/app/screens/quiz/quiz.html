@@ -12,7 +12,7 @@
     </div>
 
     <div class="header-center">
-      <button class="ctx-btn" (click)="showContext.set(true); $event.stopPropagation()">
+      <button type="button" class="ctx-btn" (click)="showContext.set(true); $event.stopPropagation()">
         📖 Ver contexto
       </button>
     </div>
@@ -130,9 +130,9 @@
 
       @if (currentQuestion().mode === 'classic') {
         <div class="action-row" @fadeIn>
-          <button class="action-btn btn-wrong"   (click)="registerAnswer(false)">✕ Incorrecto</button>
-          <button class="action-btn btn-random"  (click)="randomAnswer()">🎲 Aleatorio</button>
-          <button class="action-btn btn-correct" (click)="registerAnswer(true)">○ Correcto</button>
+          <button type="button" class="action-btn btn-wrong"   (click)="registerAnswer(false)">✕ Incorrecto</button>
+          <button type="button" class="action-btn btn-random"  (click)="randomAnswer()">🎲 Aleatorio</button>
+          <button type="button" class="action-btn btn-correct" (click)="registerAnswer(true)">○ Correcto</button>
         </div>
       }
 
@@ -191,17 +191,17 @@
     @if (showComment()) {
       <div class="announcer-bubble-wrap" @fadeIn>
         @switch (commentKey()) {
-          @case (0)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (1)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (2)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (3)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (4)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (5)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (6)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (7)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (8)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (9)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-          @case (10) { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (0)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (1)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (2)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (3)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (4)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (5)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (6)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (7)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (8)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (9)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
+          @case (10) { <div class="announcer-bubble" @commentSwap>{{ comment() }}</div> }
         }
       </div>
     }

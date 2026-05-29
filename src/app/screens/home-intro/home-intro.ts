@@ -77,10 +77,15 @@ const LEVELS: LevelCard[] = [
   { id: 7, title: 'Test',                color: 'linear-gradient(145deg,#1a1a2e,#0f0f1a)', border: '#94a3b8', isTest: true },
 ];
 
+// Índice de la línea que se auto-avanza (mensaje de celular)
+const MOBILE_HINT_LINE = 2;
+const MOBILE_HINT_DURATION_MS = 3500;
+
 // Cada string reemplaza al anterior — sin historial
 const GREETING_LINES: string[] = [
   'Bienvenido a nuestro stand de Gestión de Mercados.',
   'En esta actividad haremos unas preguntas en base a la situacion que escojas',
+  'Si estas en celular, porfavor pon en modo horizontal para que se vea mejor',
   'Tranquilo, no sera tan dificil',
 ];
 
@@ -265,7 +270,21 @@ export class HomeIntro implements OnInit, OnDestroy {
       if (this.charIndex >= text.length) {
         this.clearType();
         this.isTyping.set(false);
-        this.waitingForTap = true;  // espera tap para continuar
+        if (lineIndex === MOBILE_HINT_LINE) {
+          // Auto-avanza después del tiempo establecido sin esperar tap
+          setTimeout(() => {
+            if (this.currentLineIndex() === MOBILE_HINT_LINE) {
+              const next = lineIndex + 1;
+              if (next < GREETING_LINES.length) {
+                this.typeLine(next);
+              } else {
+                this.goToLevelSelect();
+              }
+            }
+          }, MOBILE_HINT_DURATION_MS);
+        } else {
+          this.waitingForTap = true;
+        }
       }
     }, 40);
   }

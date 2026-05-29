@@ -259,3 +259,25 @@
   0%,100% { box-shadow: 0 0 20px rgba(220,38,38,0.7), 0 0 40px rgba(220,38,38,0.4), 0 4px 16px rgba(0,0,0,0.5); }
   50%     { box-shadow: 0 0 30px rgba(220,38,38,0.9), 0 0 60px rgba(220,38,38,0.6), 0 4px 20px rgba(0,0,0,0.5); }
 }
+
+@media (max-height: 620px) and (orientation: landscape) {
+  .mode-b { gap: 0.4rem; }
+
+  .col { gap: 0.5rem; }
+
+  .col-gap { flex: 0 0 70px; }
+
+  .opt-label {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.9rem;
+    min-width: 130px;
+  }
+
+  .node {
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+  }
+
+  .ok-btn { width: 70px; height: 48px; font-size: 1.4rem; }
+}

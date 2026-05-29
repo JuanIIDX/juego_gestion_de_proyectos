@@ -43,16 +43,10 @@
       <div class="bubble-center" @bubbleEnter>
         <div class="speech-bubble clickable">
           <div class="bubble-body">
-            @switch (currentLineIndex()) {
-              @case (0) {
-                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
-              }
-              @case (1) {
-                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
-              }
-              @case (2) {
-                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
-              }
+            @for (_ of [currentLineIndex()]; track currentLineIndex()) {
+              <div class="bubble-line"
+                [class.bubble-line--hint]="currentLineIndex() === 2"
+                @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
             }
           </div>
         </div>

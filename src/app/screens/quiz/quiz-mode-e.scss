@@ -15,7 +15,7 @@
 /* Fila con los dos botones */
 .tf-buttons {
   display: flex;
-  gap: 3rem;
+  gap: clamp(1rem, 4vw, 3rem);
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -23,12 +23,14 @@
 
 /* ── Botón base ── */
 .tf-btn {
-  width: 280px;
-  height: 280px;
+  /* Se adapta al alto disponible: mín 100px, preferido 38vh, máx 280px */
+  width: clamp(100px, 38vh, 280px);
+  height: clamp(100px, 38vh, 280px);
   flex-shrink: 0;
-  border-radius: 22px;
-  border: 6px solid;
+  border-radius: clamp(12px, 3vh, 22px);
+  border: clamp(3px, 0.8vh, 6px) solid;
   cursor: pointer;
+  touch-action: manipulation;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -121,8 +123,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 160px;
-  height: 160px;
+  /* 57% del tamaño del botón */
+  width: clamp(56px, 21.5vh, 160px);
+  height: clamp(56px, 21.5vh, 160px);
   transition: transform 0.3s;
 
   .tf-btn:hover:not(:disabled):not(.tf-btn--dim) & {
@@ -130,10 +133,11 @@
   }
 }
 
-/* Chulo dibujado con CSS (más limpio que el carácter Unicode) */
+/* Chulo dibujado con CSS */
 .checkmark {
-  width: 130px;
-  height: 130px;
+  /* 46% del tamaño del botón */
+  width: clamp(46px, 17.5vh, 130px);
+  height: clamp(46px, 17.5vh, 130px);
   position: relative;
 
   &::before, &::after {
@@ -143,21 +147,19 @@
     border-radius: 6px;
     transition: background 0.3s;
   }
-  /* Brazo corto (izquierdo-abajo) */
   &::before {
-    width: 14px;
-    height: 60px;
-    bottom: 12px;
-    left: 26px;
+    width: clamp(5px, 1.1vh, 14px);
+    height: clamp(22px, 4.6vh, 60px);
+    bottom: clamp(4px, 1vh, 12px);
+    left: clamp(9px, 2vh, 26px);
     transform: rotate(45deg);
     transform-origin: bottom center;
   }
-  /* Brazo largo (derecha-arriba) */
   &::after {
-    width: 14px;
-    height: 100px;
-    bottom: 12px;
-    left: 56px;
+    width: clamp(5px, 1.1vh, 14px);
+    height: clamp(36px, 7.7vh, 100px);
+    bottom: clamp(4px, 1vh, 12px);
+    left: clamp(19px, 4.3vh, 56px);
     transform: rotate(-50deg);
     transform-origin: bottom center;
   }
@@ -168,18 +170,18 @@
 
 /* Cruz dibujada con CSS */
 .crossmark {
-  width: 130px;
-  height: 130px;
+  width: clamp(46px, 17.5vh, 130px);
+  height: clamp(46px, 17.5vh, 130px);
   position: relative;
 
   &::before, &::after {
     content: '';
     position: absolute;
-    width: 14px;
-    height: 120px;
+    width: clamp(5px, 1.1vh, 14px);
+    height: clamp(42px, 9.2vh, 120px);
     background: #dc2626;
     border-radius: 7px;
-    top: 5px;
+    top: clamp(2px, 0.4vh, 5px);
     left: 50%;
     transform-origin: center center;
     transition: background 0.3s;
@@ -258,9 +260,9 @@
 /* Etiqueta debajo del botón */
 .tf-label {
   position: absolute;
-  bottom: 14px;
+  bottom: clamp(5px, 1.4vh, 14px);
   font-family: 'Georgia', serif;
-  font-size: 1.1rem;
+  font-size: clamp(0.65rem, 1.5vh, 1.1rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   pointer-events: none;
@@ -268,3 +270,7 @@
   .tf-btn--circle & { color: #15803d; }
   .tf-btn--cross  & { color: #b91c1c; }
 }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — LANDSCAPE MÓVIL
+═══════════════════════════════════════ */
