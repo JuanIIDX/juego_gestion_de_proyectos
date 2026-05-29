@@ -349,7 +349,7 @@
 }
 
 .character-img--side {
-  width: clamp(90px, 28vh, 220px);
+  width: clamp(80px, 18vw, 220px);
   height: auto;
   object-fit: contain;
   object-position: bottom center;
@@ -384,7 +384,32 @@
   overflow: hidden;  /* para que el lineSwap no desborde */
 
   &.clickable { cursor: pointer; }
-  &.speech-bubble--side { padding: 1.1rem 1.4rem; }
+
+  &.speech-bubble--side {
+    padding: clamp(0.5rem, 1.2vh, 1.1rem) clamp(0.6rem, 1.4vw, 1.4rem);
+    font-size: clamp(0.7rem, 1.5vw, 1rem);
+
+    /* Cola apuntando hacia abajo (hacia el personaje que está debajo) */
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -19px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 13px solid transparent;
+      border-right: 13px solid transparent;
+      border-top: 18px solid #1a0a00;
+    }
+    &::before {
+      content: '';
+      position: absolute;
+      bottom: -13px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 14px solid #fffef0;
+      z-index: 1;
+    }
+  }
 }
 
 .bubble-body {
@@ -403,8 +428,8 @@
   word-break: break-word;
 }
 .bubble-line--small {
-  font-size: 1.3rem;
-  min-height: 2rem;
+  font-size: clamp(0.75rem, 2vh, 1.3rem);
+  min-height: 1.5rem;
   line-height: 1.5;
 }
 
@@ -532,24 +557,26 @@
   z-index: 2;
 }
 
-/* Cartas (58% izq) */
+/* Cartas (resto del espacio tras el personaje) */
 .cards-area {
-  flex: 0 0 58%;
+  flex: 1 1 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1rem 2rem 2.5rem;
-  gap: 1.4rem;
+  padding: clamp(0.4rem, 1.5vh, 2rem) clamp(0.4rem, 1vw, 1rem) clamp(0.4rem, 1.5vh, 2rem) clamp(0.8rem, 2vw, 2.5rem);
+  gap: clamp(0.3rem, 1vh, 1.4rem);
   box-sizing: border-box;
-  position: relative;  /* para el overlay absoluto */
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .level-header { text-align: center; }
 .level-title {
   font-family: 'Georgia', serif;
-  font-size: clamp(1.1rem, 3.5vh, 2.2rem); font-weight: 900; color: #fff;
-  margin: 0 0 0.3rem; letter-spacing: 0.04em;
+  font-size: clamp(0.9rem, 2.5vh, 2.2rem); font-weight: 900; color: #fff;
+  margin: 0 0 clamp(0.1rem, 0.3vh, 0.3rem); letter-spacing: 0.04em;
   text-shadow: 0 0 30px rgba(255,255,255,0.2);
 }
 .level-subtitle {
@@ -561,13 +588,13 @@
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.1rem;
-  width: 100%; max-width: 760px;
+  gap: clamp(0.3rem, 0.8vw, 1.1rem);
+  width: 100%;
+  max-width: 760px;
+  /* Limitar alto total del grid para que quepan en cualquier pantalla */
+  max-height: 80vh;
 
-  /* La 7ª carta (Test) ocupa la columna central de la 3ª fila */
-  .card--test {
-    grid-column: 2 / 3;
-  }
+  .card--test { grid-column: 2 / 3; }
 }
 
 .level-card {
@@ -575,6 +602,8 @@
   overflow: hidden; cursor: pointer;
   aspect-ratio: 3/4; isolation: isolate;
   user-select: none; will-change: transform;
+  /* Limitar altura máxima de cada carta */
+  max-height: 35vh;
 }
 .card-bg   { position: absolute; inset: 0; z-index: 0; }
 .card-border {
@@ -630,9 +659,9 @@
 }
 
 .card-title {
-  font-family: 'Georgia', serif; font-size: 1.15rem; font-weight: 900;
+  font-family: 'Georgia', serif; font-size: clamp(0.65rem, 1.8vh, 1.15rem); font-weight: 900;
   color: #fff; letter-spacing: 0.04em; text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  margin-top: 0.7rem;
+  margin-top: clamp(0.2rem, 0.7vh, 0.7rem);
   padding: 0 0.5rem;
 }
 .card-subtitle {
@@ -801,24 +830,27 @@
   }
 }
 
-/* Personaje (42% der) */
+/* Personaje (columna derecha) — burbuja arriba, personaje abajo */
 .announcer-area {
-  flex: 0 0 42%;
+  flex: 0 0 clamp(140px, 22vw, 320px);
   display: flex;
-  flex-direction: row;   /* [burbuja][cola][personaje] */
-  align-items: flex-end;
-  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 0;
   box-sizing: border-box;
+
+  /* Ocultar la cola lateral — ahora la cola está en CSS de speech-bubble--side */
+  .tail-right { display: none; }
 }
 
 .bubble-side {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;  /* burbuja + cola en columna */
   align-items: center;
-  align-self: flex-end;
-  margin-bottom: clamp(60px, 26vh, 180px);
-  flex-shrink: 0;
-  max-width: clamp(180px, 30vw, 380px);
+  flex-shrink: 1;
+  width: clamp(110px, 18vw, 260px);
+  margin-bottom: 0;
   z-index: 10;
 }
 

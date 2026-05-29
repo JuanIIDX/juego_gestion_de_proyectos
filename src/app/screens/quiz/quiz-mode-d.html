@@ -7,8 +7,7 @@
       [class.choice-row--wrong]="isWrong(opt.id)"
       [class.choice-row--dim]="revealed() && selectedId() !== opt.id && !isRight(opt.id)"
       [@selectFlash]="optionState(opt.id)"
-      (click)="select(opt.id)"
-      (touchend)="select(opt.id); $event.preventDefault()">
+      (click)="select(opt.id)">
 
       <!-- Badge numérico -->
       <div class="choice-badge" [class]="'badge-' + opt.id">

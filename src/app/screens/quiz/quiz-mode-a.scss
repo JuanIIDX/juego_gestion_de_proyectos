@@ -7,10 +7,10 @@
   align-items: center;
   justify-content: center;
   flex: 1;
-  gap: 1.2rem;
+  gap: clamp(0.3rem, 1vh, 1rem);
   position: relative;
-  width: 75vw;
-  margin-left: calc(-37.5vw + 50%);
+  width: 100%;       /* ocupa el espacio que le deja quiz-screen */
+  min-height: 0;
 }
 
 /* ═══════════════════════════════════════
@@ -19,25 +19,27 @@
 .panels-row {
   display: flex;
   align-items: stretch;
-  justify-content: stretch;
   width: 100%;
   gap: 0;
-  min-height: 420px;
+  /* Altura máxima proporcional al viewport, nunca más de 65% del alto */
+  max-height: 65vh;
   flex: 1;
+  min-height: 0;
 }
 
 /* ═══════════════════════════════════════
-   PANELES LATERALES
+   PANELES
 ═══════════════════════════════════════ */
 .panel {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 1.5rem 1.4rem;
+  padding: clamp(0.3rem, 1vh, 1rem) clamp(0.3rem, 1vw, 1rem);
   position: relative;
   overflow: hidden;
   transition: filter 0.2s;
+  min-width: 0;
 
   &.panel--hover { filter: brightness(1.25); }
 }
@@ -58,24 +60,33 @@
   box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
 }
 
+.panel-middle {
+  background: linear-gradient(160deg, #3b1060 0%, #1e0840 60%, #160630 100%);
+  border-radius: 0;
+  border: 3px solid rgba(160,80,220,0.5);
+  border-left: none;
+  border-right: none;
+  box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
+}
+
 .panel-label {
   font-family: 'Georgia', serif;
-  font-size: 1.3rem;
+  font-size: clamp(0.65rem, 1.8vh, 1.3rem);
   font-weight: 700;
   color: rgba(255,255,255,0.75);
   letter-spacing: 0.08em;
-  margin-bottom: 0.4rem;
+  margin-bottom: clamp(0.2rem, 0.5vh, 0.4rem);
   text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+  flex-shrink: 0;
 }
 
-/* Letra gigante A / B / C de fondo */
+/* Letra de fondo decorativa */
 .panel-letter {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'Georgia', serif;
-  font-size: 11rem;
+  font-size: clamp(3rem, 10vh, 11rem);
   font-weight: 900;
   pointer-events: none;
   user-select: none;
@@ -86,33 +97,21 @@
   .panel-right  & { color: rgba(80,140,230,0.28); }
 }
 
-/* Panel central (Modo F) */
-.panel-middle {
-  background: linear-gradient(160deg, #3b1060 0%, #1e0840 60%, #160630 100%);
-  border-radius: 0;
-  border: 3px solid rgba(160,80,220,0.5);
-  border-left: none;
-  border-right: none;
-  box-shadow: inset 0 0 60px rgba(0,0,0,0.4);
-}
-
-/* En modo triple, reducir font del panel-letter para caber */
-.mode-a--triple .panel-letter { font-size: 7rem; }
+.mode-a--triple .panel-letter { font-size: clamp(2rem, 7vh, 7rem); }
 .mode-a--triple .panels-row   { max-width: 1200px; }
 
 .panel-chips {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 0.7rem;
+  align-items: stretch;
+  gap: clamp(0.2rem, 0.6vh, 0.5rem);
   width: 100%;
   z-index: 2;
-  margin-top: 0.5rem;
+  margin-top: clamp(0.2rem, 0.5vh, 0.4rem);
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 }
-
-/* ═══════════════════════════════════════
-   CHIPS DE RESPUESTA
-═══════════════════════════════════════ */
 
 /* ═══════════════════════════════════════
    CHIPS DE RESPUESTA
@@ -122,8 +121,10 @@
   align-items: center;
   background: linear-gradient(90deg, rgba(200,240,220,0.9), rgba(220,255,235,0.95));
   border-radius: 8px;
-  padding: 0.4rem 0.3rem;
-  width: 270px;
+  padding: clamp(0.15rem, 0.5vh, 0.35rem) clamp(0.2rem, 0.4vw, 0.3rem);
+  width: 100%;
+  max-height: clamp(36px, 8vh, 64px);  /* nunca más alto que esto */
+  flex-shrink: 1;
   position: relative;
   user-select: none;
   transition: background 0.3s, box-shadow 0.15s;
@@ -145,23 +146,22 @@
   flex: 1;
   text-align: center;
   font-family: 'Georgia', serif;
-  font-size: 1.2rem;
+  font-size: clamp(0.6rem, 1.6vh, 1.2rem);
   font-weight: 700;
   color: #0a1a0a;
   letter-spacing: 0.02em;
   padding: 0 0.2rem;
+  word-break: break-word;
 }
-
-
 
 /* Botones táctiles de dirección */
 .chip-btn {
-  width: 52px;
-  height: 52px;
+  width: clamp(24px, 4.5vh, 52px);
+  height: clamp(24px, 4.5vh, 52px);
   flex-shrink: 0;
   border: none;
   border-radius: 6px;
-  font-size: 1.4rem;
+  font-size: clamp(0.7rem, 1.6vh, 1.4rem);
   font-weight: 900;
   cursor: pointer;
   display: flex;
@@ -177,25 +177,25 @@
   &:disabled { opacity: 0.2; cursor: not-allowed; }
 
   &.chip-btn--left  { border-radius: 6px 0 0 6px; }
-  &.chip-btn--mid   { border-radius: 0; font-size: 1rem; }
+  &.chip-btn--mid   { border-radius: 0; font-size: clamp(0.6rem, 1.2vh, 1rem); }
   &.chip-btn--right { border-radius: 0 6px 6px 0; }
 }
 
 .chip-arrow {
-  font-size: 0.85rem;
+  font-size: clamp(0.55rem, 1.2vh, 0.85rem);
   color: rgba(0,0,0,0.35);
   flex-shrink: 0;
-  &.chip-arrow--left  { margin-right: 0.3rem; }
-  &.chip-arrow--right { margin-left: 0.3rem; }
+  &.chip-arrow--left  { margin-right: 0.2rem; }
+  &.chip-arrow--right { margin-left: 0.2rem; }
 }
 
-/* Símbolo ○/✕ que aparece tras el reveal */
+/* Símbolo ○/✕ tras reveal */
 .chip-result {
   position: absolute;
   right: -14px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 1.5rem;
+  font-size: clamp(0.9rem, 1.8vh, 1.5rem);
   font-weight: 900;
   pointer-events: none;
 
@@ -208,8 +208,9 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
-  margin-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  margin-top: clamp(0.2rem, 0.5vh, 0.5rem);
+  padding-bottom: clamp(0.2rem, 0.5vh, 0.5rem);
+  flex-shrink: 0;
 }
 
 /* ═══════════════════════════════════════
@@ -218,14 +219,14 @@
 .ok-btn {
   position: static;
   transform: none;
-  width: 100px;
-  height: 70px;
+  width: clamp(60px, 9vw, 100px);
+  height: clamp(36px, 7vh, 70px);
   border-radius: 10px;
   border: 4px solid #7f1d1d;
   background: #991b1b;
   color: rgba(255,255,255,0.35);
   font-family: 'Georgia', serif;
-  font-size: 2rem;
+  font-size: clamp(1rem, 2.5vh, 2rem);
   font-weight: 900;
   letter-spacing: 0.12em;
   cursor: not-allowed;
@@ -233,8 +234,8 @@
   transition: background 0.25s, border-color 0.25s, color 0.25s,
               transform 0.12s, box-shadow 0.2s;
   z-index: 80;
+  touch-action: manipulation;
 
-  /* Activo cuando todos los chips están clasificados */
   &.ok-btn--ready {
     border-color: #dc2626;
     background: #dc2626;
@@ -255,24 +256,4 @@
 @keyframes ok-pulse {
   0%,100% { box-shadow: 0 0 20px rgba(220,38,38,0.7), 0 0 40px rgba(220,38,38,0.4), 0 4px 16px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2); }
   50%     { box-shadow: 0 0 30px rgba(220,38,38,0.9), 0 0 60px rgba(220,38,38,0.6), 0 4px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2); }
-}
-
-@media (max-height: 620px) and (orientation: landscape) {
-  .mode-a { gap: 0.5rem; }
-
-  .panels-row { min-height: 160px; }
-
-  .panel { padding: 0.5rem 0.8rem 0.7rem; }
-
-  .panel-letter { font-size: 5rem; }
-
-  .panel-label { font-size: 0.9rem; margin-bottom: 0.2rem; }
-
-  .answer-chip { width: auto; }
-
-  .chip-text { font-size: 0.9rem; }
-
-  .chip-btn { width: 36px; height: 36px; font-size: 1rem; }
-
-  .ok-btn { width: 70px; height: 48px; font-size: 1.4rem; }
 }

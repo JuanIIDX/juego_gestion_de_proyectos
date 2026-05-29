@@ -54,8 +54,7 @@
             [class.node--connected]="isLeftConnected(opt.id)"
             [class.node--correct]="revealed() && isConnectionCorrect(connectionForLeft(opt.id)!)"
             [class.node--wrong]="revealed() && connectionForLeft(opt.id) && !isConnectionCorrect(connectionForLeft(opt.id)!)"
-            (click)="selectLeft(opt.id)"
-            (touchend)="selectLeft(opt.id); $event.preventDefault()">
+            (click)="selectLeft(opt.id)">
             {{ opt.id }}
             @if (revealed() && connectionForLeft(opt.id)) {
               <span class="node-result" @resultPop>
@@ -78,14 +77,12 @@
             [attr.data-right]="opt.id"
             [class.node--connected]="isRightConnected(opt.id)"
             [class.node--target]="selectedLeft() !== null && !isRightConnected(opt.id)"
-            (click)="selectRight(opt.id)"
-            (touchend)="selectRight(opt.id); $event.preventDefault()">
+            (click)="selectRight(opt.id)">
             {{ opt.id }}
           </div>
           <div class="opt-label opt-label--right"
             [class.opt-label--connected]="isRightConnected(opt.id)"
-            (click)="selectRight(opt.id)"
-            (touchend)="selectRight(opt.id); $event.preventDefault()">
+            (click)="selectRight(opt.id)">
             {{ opt.text }}
           </div>
         </div>

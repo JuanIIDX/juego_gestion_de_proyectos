@@ -8,9 +8,10 @@
   width: 100%;
   max-width: 820px;
   flex: 1;
-  gap: 2rem;
-  padding: 0.5rem 0;
+  gap: clamp(0.2rem, 1vh, 0.8rem);
+  padding: clamp(0.2rem, 0.5vh, 0.5rem) 0;
   position: relative;
+  min-height: 0;
 }
 
 /* ═══════════════════════════════════════
@@ -20,12 +21,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: clamp(0.2rem, 0.8vw, 0.8rem);
+  flex-shrink: 0;
 }
 
 .slot {
-  width: 220px;
-  height: 86px;
+  width: clamp(90px, 16vw, 180px);
+  height: clamp(34px, 6vh, 64px);
   border-radius: 10px;
   border: 3px solid rgba(100,160,255,0.4);
   background: rgba(10,20,40,0.65);
@@ -37,30 +39,24 @@
   position: relative;
   transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
   box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+  touch-action: manipulation;
 
-  /* Vacía pero lista para recibir */
   &.slot--ready {
     border-color: #a78bfa;
     background: rgba(109,40,217,0.18);
     box-shadow: 0 0 16px rgba(167,139,250,0.5), inset 0 0 20px rgba(0,0,0,0.2);
     animation: slot-ready-pulse 0.8s ease-in-out infinite;
   }
-
-  /* Tiene contenido */
   &.slot--filled {
     border-color: rgba(167,139,250,0.7);
     background: rgba(30,15,60,0.75);
     box-shadow: 0 0 12px rgba(167,139,250,0.3), inset 0 0 20px rgba(0,0,0,0.2);
   }
-
-  /* Correcto tras reveal */
   &.slot--correct {
     border-color: #22c55e;
     background: rgba(20,83,45,0.55);
     box-shadow: 0 0 20px rgba(34,197,94,0.6), inset 0 0 20px rgba(0,0,0,0.2);
   }
-
-  /* Incorrecto tras reveal */
   &.slot--wrong {
     border-color: #ef4444;
     background: rgba(127,29,29,0.55);
@@ -73,7 +69,6 @@
   0%,100% { box-shadow: 0 0 14px rgba(167,139,250,0.4), inset 0 0 20px rgba(0,0,0,0.2); }
   50%     { box-shadow: 0 0 26px rgba(167,139,250,0.75), inset 0 0 20px rgba(0,0,0,0.2); }
 }
-
 @keyframes shake-wrong {
   0%,100% { transform: translateX(0); }
   20%     { transform: translateX(-6px); }
@@ -82,33 +77,32 @@
   80%     { transform: translateX(4px); }
 }
 
-/* Número de posición cuando la casilla está vacía */
 .slot-pos {
   font-family: 'Georgia', serif;
-  font-size: 1.6rem;
+  font-size: clamp(0.8rem, 2vh, 1.4rem);
   font-weight: 900;
   color: rgba(100,160,255,0.25);
   user-select: none;
   pointer-events: none;
 }
 
-/* Chip dentro de la casilla */
 .slot-chip {
   display: flex;
   align-items: center;
-  gap: 0.55rem;
-  padding: 0 0.8rem;
+  gap: clamp(0.2rem, 0.5vw, 0.55rem);
+  padding: 0 clamp(0.3rem, 0.8vw, 0.8rem);
   width: 100%;
 }
 
 .slot-chip-letter {
   font-family: 'Georgia', serif;
-  font-size: 1.3rem;
+  font-size: clamp(0.7rem, 1.8vh, 1.3rem);
   font-weight: 900;
   color: #c4b5fd;
   flex-shrink: 0;
   background: rgba(109,40,217,0.5);
-  width: 34px; height: 34px;
+  width: clamp(22px, 3.5vh, 34px);
+  height: clamp(22px, 3.5vh, 34px);
   border-radius: 7px;
   display: flex; align-items: center; justify-content: center;
   border: 2px solid rgba(167,139,250,0.5);
@@ -116,7 +110,7 @@
 
 .slot-chip-text {
   font-family: 'Georgia', serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.65rem, 1.6vh, 0.95rem);
   font-weight: 600;
   color: #e9d5ff;
   flex: 1;
@@ -125,12 +119,10 @@
   white-space: nowrap;
 }
 
-/* Resultado ○/✕ en la esquina superior derecha del slot */
 .slot-result {
   position: absolute;
-  top: -14px;
-  right: -10px;
-  font-size: 1.4rem;
+  top: -14px; right: -10px;
+  font-size: clamp(0.9rem, 1.8vh, 1.4rem);
   font-weight: 900;
   pointer-events: none;
   z-index: 5;
@@ -139,9 +131,8 @@
   .slot--wrong   & { color: #f87171; text-shadow: 0 0 10px rgba(239,68,68,0.8); }
 }
 
-/* Flecha entre casillas */
 .slot-arrow {
-  font-size: 1.6rem;
+  font-size: clamp(0.9rem, 2vh, 1.6rem);
   color: rgba(100,160,255,0.45);
   flex-shrink: 0;
   filter: drop-shadow(0 0 4px rgba(100,160,255,0.3));
@@ -154,143 +145,134 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.85rem;
+  gap: clamp(0.2rem, 0.8vh, 0.6rem);
   width: 100%;
-  max-width: 560px;
+  max-width: min(560px, 75vw);  /* nunca más del 75% del ancho */
+  flex-shrink: 0;
 }
 
 .option-row {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 0;
   width: 100%;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 4px 14px rgba(0,0,0,0.45);
   transition: transform 0.15s, box-shadow 0.2s;
+  touch-action: manipulation;
+  height: clamp(32px, 6vh, 55px);
 
   &:hover { transform: translateY(-3px) scale(1.015); box-shadow: 0 7px 22px rgba(0,0,0,0.5); }
   &:active { transform: scale(0.98); }
 
   &.option-row--selected {
     transform: translateY(-4px) scale(1.02);
-    box-shadow:
-      0 0 20px rgba(167,139,250,0.7),
-      0 0 40px rgba(167,139,250,0.35),
-      0 7px 22px rgba(0,0,0,0.5);
+    box-shadow: 0 0 20px rgba(167,139,250,0.7), 0 0 40px rgba(167,139,250,0.35), 0 7px 22px rgba(0,0,0,0.5);
 
-    .option-badge {
-      background: linear-gradient(135deg, #7c3aed, #9d4edd);
-      border-color: #c4b5fd;
-    }
-    .option-label {
-      background: linear-gradient(90deg, rgba(109,40,217,0.25), rgba(139,92,246,0.2));
-      color: #f3e8ff;
-    }
+    .option-badge { background: linear-gradient(135deg, #7c3aed, #9d4edd); border-color: #c4b5fd; }
+    .option-label { background: linear-gradient(90deg, rgba(109,40,217,0.25), rgba(139,92,246,0.2)); color: #f3e8ff; }
   }
 }
 
-/* Badge de letra (A / B / C) */
 .option-badge {
-  width: 56px;
-  height: 64px;
+  width: clamp(28px, 4vw, 48px);
+  height: 100%;
   background: linear-gradient(135deg, #4c1d95, #5b21b6);
-  border: 3px solid #6d28d9;
+  border: 2px solid #6d28d9;
   border-right: none;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Georgia', serif;
-  font-size: 1.5rem;
+  font-size: clamp(0.65rem, 1.6vh, 1.2rem);
   font-weight: 900;
   color: #e9d5ff;
   flex-shrink: 0;
   transition: background 0.2s, border-color 0.2s;
 }
 
-/* Texto de la opción */
 .option-label {
   flex: 1;
-  height: 64px;
+  height: 100%;
   background: linear-gradient(90deg, rgba(225,215,175,0.9), rgba(245,238,200,0.94));
   display: flex;
   align-items: center;
-  padding: 0 1.5rem;
+  padding: 0 clamp(0.5rem, 1.2vw, 1.5rem);
   font-family: 'Georgia', serif;
-  font-size: 1.35rem;
+  font-size: clamp(0.6rem, 1.5vw, 1.1rem);
   font-weight: 700;
   color: #1a1200;
   transition: background 0.2s, color 0.2s;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .options-empty {
   font-family: 'Georgia', serif;
-  font-size: 1rem;
+  font-size: clamp(0.75rem, 1.5vh, 1rem);
   color: rgba(255,255,255,0.4);
   font-style: italic;
   text-align: center;
 }
 
-/* ═══════════════════════════════════════
-   INSTRUCCIÓN
-═══════════════════════════════════════ */
 .hint {
   font-family: 'Georgia', serif;
-  font-size: 0.95rem;
+  font-size: clamp(0.65rem, 1.4vh, 0.95rem);
   color: rgba(255,255,255,0.4);
   font-style: italic;
   letter-spacing: 0.04em;
   text-align: center;
+  flex-shrink: 0;
 }
 
-/* ── Fila de botones ── */
 .btn-row {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  margin-top: 0.4rem;
+  margin-top: clamp(0.2rem, 0.4vh, 0.4rem);
+  flex-shrink: 0;
 }
 
 .cancel-btn {
   font-family: 'Georgia', serif;
-  font-size: 1.3rem;
+  font-size: clamp(0.75rem, 1.8vh, 1.3rem);
   font-weight: 700;
-  padding: 0 2rem;
-  height: 70px;
+  padding: 0 clamp(0.6rem, 1.5vw, 2rem);
+  height: clamp(36px, 6.5vh, 64px);
   border-radius: 10px;
   border: 3px solid rgba(148,163,184,0.5);
   background: rgba(30,41,59,0.7);
   color: rgba(255,255,255,0.6);
   cursor: pointer;
   letter-spacing: 0.04em;
+  touch-action: manipulation;
   transition: background 0.2s, color 0.2s, transform 0.1s;
   &:hover:not(:disabled)  { background: rgba(51,65,85,0.85); color: #fff; transform: translateY(-2px); }
   &:active:not(:disabled) { transform: translateY(1px); }
   &:disabled { opacity: 0.25; cursor: not-allowed; }
 }
 
-/* ═══════════════════════════════════════
-   BOTÓN OK
-═══════════════════════════════════════ */
 .ok-btn {
   position: static;
   transform: none;
-  width: 100px;
-  height: 70px;
+  width: clamp(56px, 8vw, 100px);
+  height: clamp(36px, 6.5vh, 70px);
   border-radius: 10px;
   border: 4px solid #7f1d1d;
   background: #991b1b;
   color: rgba(255,255,255,0.35);
   font-family: 'Georgia', serif;
-  font-size: 2rem;
+  font-size: clamp(0.9rem, 2vh, 2rem);
   font-weight: 900;
   letter-spacing: 0.12em;
   cursor: not-allowed;
+  touch-action: manipulation;
   box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.1);
-  transition: background 0.25s, border-color 0.25s, color 0.25s,
-              transform 0.12s, box-shadow 0.2s;
+  transition: background 0.25s, border-color 0.25s, color 0.25s, transform 0.12s, box-shadow 0.2s;
   z-index: 80;
 
   &.ok-btn--ready {
@@ -298,13 +280,8 @@
     background: #dc2626;
     color: #fff;
     cursor: pointer;
-    box-shadow:
-      0 0 20px rgba(220,38,38,0.7),
-      0 0 40px rgba(220,38,38,0.4),
-      0 4px 16px rgba(0,0,0,0.5),
-      inset 0 2px 0 rgba(255,255,255,0.2);
+    box-shadow: 0 0 20px rgba(220,38,38,0.7), 0 0 40px rgba(220,38,38,0.4), 0 4px 16px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.2);
     animation: ok-pulse 1.4s ease-in-out infinite;
-
     &:hover  { transform: scale(1.08) translateY(-2px); }
     &:active { transform: scale(0.95); }
   }
@@ -313,18 +290,4 @@
 @keyframes ok-pulse {
   0%,100% { box-shadow: 0 0 20px rgba(220,38,38,0.7), 0 0 40px rgba(220,38,38,0.4), 0 4px 16px rgba(0,0,0,0.5); }
   50%     { box-shadow: 0 0 30px rgba(220,38,38,0.9), 0 0 60px rgba(220,38,38,0.6), 0 4px 20px rgba(0,0,0,0.5); }
-}
-
-@media (max-height: 620px) and (orientation: landscape) {
-  .mode-c { gap: 0.6rem; }
-
-  .slots-row { gap: 0.3rem; }
-
-  .slot {
-    width: 140px;
-    height: 54px;
-    font-size: 0.85rem;
-  }
-
-  .ok-btn { width: 70px; height: 48px; font-size: 1.4rem; }
 }

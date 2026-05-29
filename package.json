@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "env": "node scripts/set-env.mjs",
+    "env": "",
     "start": "npm run env && ng serve",
     "build": "ng build",
     "watch": "npm run env && ng build --watch --configuration development",
