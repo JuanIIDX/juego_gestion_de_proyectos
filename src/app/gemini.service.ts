@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../environments/environment';
 
 export interface GeminiVerdict {
   winner: 'left' | 'right';
@@ -8,8 +7,9 @@ export interface GeminiVerdict {
 
 @Injectable({ providedIn: 'root' })
 export class GeminiService {
+  private readonly apiKey = '';
   private readonly url =
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${environment.geminiApiKey}`;
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${this.apiKey}`;
 
   async evaluate(
     topicTitle: string,
@@ -70,7 +70,7 @@ Responde ÚNICAMENTE con este JSON, sin texto adicional, sin markdown, sin bloqu
   }
 
   async listModels(): Promise<{ name: string; displayName: string; supportedMethods: string[] }[]> {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${environment.geminiApiKey}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${this.apiKey}`;
     const res = await fetch(url);
 
     if (!res.ok) {
