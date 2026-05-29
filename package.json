@@ -5,7 +5,7 @@
     "ng": "ng",
     "env": "node scripts/set-env.mjs",
     "start": "npm run env && ng serve",
-    "build": "npm run env && ng build",
+    "build": "ng build",
     "watch": "npm run env && ng build --watch --configuration development",
     "test": "ng test"
   },
