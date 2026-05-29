@@ -1,4 +1,41 @@
 /* ═══════════════════════════════════════
+   MODO BORED — círculos con estilo
+═══════════════════════════════════════ */
+.bored-circle {
+  border-radius: 50%;
+  background: conic-gradient(#ff6b6b, #ffd93d, #6bcb77, #4d96ff, #ff6b6b);
+  animation: bored-spin 4s linear infinite;
+  flex-shrink: 0;
+
+  &--announcer {
+    width: 240px; height: 240px;
+    box-shadow: 0 0 40px 10px rgba(255,180,50,0.5);
+    align-self: flex-end;
+  }
+  &--side {
+    width: 220px; height: 220px;
+    box-shadow: 0 0 40px 10px rgba(255,180,50,0.5);
+  }
+  &--card {
+    width: 70%; aspect-ratio: 1;
+    flex: none;
+    margin: auto;
+    box-shadow: 0 0 20px 4px rgba(255,180,50,0.4);
+  }
+  &--ctx {
+    width: 190px; height: 190px;
+    flex-shrink: 0;
+    align-self: center;
+    box-shadow: 0 0 40px 10px rgba(255,180,50,0.5);
+  }
+}
+
+@keyframes bored-spin {
+  from { filter: hue-rotate(0deg) brightness(1.1); transform: rotate(0deg); }
+  to   { filter: hue-rotate(360deg) brightness(1.1); transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════
    SCREEN
 ═══════════════════════════════════════ */
 .home-screen {

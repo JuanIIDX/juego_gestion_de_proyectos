@@ -4,6 +4,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate, query, stagger } from '@angular/animations';
 import { Quiz } from '../quiz/quiz';
+import { IS_BORED } from '../../bored';
 
 export type HomePhase = 'greeting' | 'level-select' | 'quiz';
 export type SpaceMode = 'calm' | 'fast' | 'faster' | 'chaos';
@@ -158,6 +159,8 @@ const LEVEL_SELECT_LINE = 'Escoje algun personaje y analiza su situacion detenid
   ],
 })
 export class HomeIntro implements OnInit, OnDestroy {
+  readonly isBored = IS_BORED;
+
   phase = signal<HomePhase>('greeting');
   spaceMode = signal<SpaceMode>('calm');
   selectedLevelId = signal(1);

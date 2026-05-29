@@ -12,7 +12,6 @@
     </div>
 
     <div class="header-center">
-      <span class="header-tag">Gestión de Mercados</span>
       <button class="ctx-btn" (click)="showContext.set(true); $event.stopPropagation()">
         📖 Ver contexto
       </button>
@@ -189,28 +188,37 @@
   <div class="announcer-bar" @announcerPop>
 
     <!-- Burbuja del comentarista -->
-    <div class="announcer-bubble-wrap">
-      @switch (commentKey()) {
-        @case (0)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (1)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (2)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (3)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (4)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (5)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (6)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (7)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (8)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (9)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-        @case (10) { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
-      }
-    </div>
+    @if (showComment()) {
+      <div class="announcer-bubble-wrap" @fadeIn>
+        @switch (commentKey()) {
+          @case (0)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (1)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (2)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (3)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (4)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (5)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (6)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (7)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (8)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (9)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+          @case (10) { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        }
+      </div>
+    }
 
     <!-- Personaje del nivel -->
-    <img class="announcer-character"
-      [src]="announcerImage"
-      [class.announcer--correct]="lastCorrect() === true"
-      [class.announcer--wrong]="lastCorrect() === false"
-      alt="Personaje" />
+    @if (isBored) {
+      <div class="bored-circle bored-circle--quiz"
+        [class.announcer--correct]="lastCorrect() === true"
+        [class.announcer--wrong]="lastCorrect() === false"></div>
+    } @else {
+      <img class="announcer-character"
+        [src]="announcerImage"
+        [class]="'announcer-character level-aura-' + levelId"
+        [class.announcer--correct]="lastCorrect() === true"
+        [class.announcer--wrong]="lastCorrect() === false"
+        alt="Personaje" />
+    }
 
   </div>
 

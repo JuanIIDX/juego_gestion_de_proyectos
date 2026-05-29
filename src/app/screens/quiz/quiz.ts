@@ -8,6 +8,7 @@ import { QuizModeB } from './quiz-mode-b';
 import { QuizModeC } from './quiz-mode-c';
 import { QuizModeD } from './quiz-mode-d';
 import { QuizModeE } from './quiz-mode-e';
+import { IS_BORED } from '../../bored';
 
 // ── Tipos de pregunta ──
 export type QuestionMode = 'classic' | 'sort' | 'match' | 'order' | 'choice' | 'truefalse' | 'sort3';
@@ -859,6 +860,8 @@ export interface QuizResult {
   ],
 })
 export class Quiz implements OnInit, OnDestroy {
+  readonly isBored = IS_BORED;
+
   @Input() levelId = 1;
   @Input() levelTitle = '';
   @Input() levelContext = '';
@@ -888,6 +891,8 @@ export class Quiz implements OnInit, OnDestroy {
   // Comentarista
   comment = signal(pick(COMMENTS['start']));
   commentKey = signal(0);
+  showComment = signal(true);
+  private commentTimeout: any = null;
   slowWarned = false;
 
   private timerInterval: any = null;
@@ -927,6 +932,7 @@ export class Quiz implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.clearTimer();
     this.clearTypeInterval();
+    if (this.commentTimeout) clearTimeout(this.commentTimeout);
   }
 
   private typeQuestion() {
@@ -1032,6 +1038,9 @@ export class Quiz implements OnInit, OnDestroy {
   private say(text: string) {
     this.comment.set(text);
     this.commentKey.update(k => k + 1);
+    this.showComment.set(true);
+    if (this.commentTimeout) clearTimeout(this.commentTimeout);
+    this.commentTimeout = setTimeout(() => this.showComment.set(false), 10000);
   }
 
   private emitSpaceMode() {

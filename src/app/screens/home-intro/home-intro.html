@@ -61,7 +61,11 @@
 
       <!-- Personaje centrado -->
       <div class="announcer-center" @announcerEnter>
-        <img class="character-img" [src]="characterImage()" alt="Personaje" />
+        @if (isBored) {
+          <div class="bored-circle bored-circle--announcer"></div>
+        } @else {
+          <img class="character-img" [src]="characterImage()" alt="Personaje" />
+        }
       </div>
 
     </div>
@@ -108,7 +112,9 @@
 
               <!-- Contenido normal del card -->
               <div class="card-content">
-                @if (level.image) {
+                @if (isBored) {
+                  <div class="bored-circle bored-circle--card" [style.background]="level.border"></div>
+                } @else if (level.image) {
                   <img class="card-character" [src]="level.image" [alt]="level.title" />
                 } @else {
                   <div class="card-image-placeholder" [style.background]="level.border"></div>
@@ -136,7 +142,11 @@
             <div class="tail-right"></div>
           </div>
         }
-        <img class="character-img character-img--side" [src]="characterImage()" alt="Personaje" />
+        @if (isBored) {
+          <div class="bored-circle bored-circle--side"></div>
+        } @else {
+          <img class="character-img character-img--side" [src]="characterImage()" alt="Personaje" />
+        }
       </div>
 
     </div>
@@ -161,7 +171,9 @@
         <!-- Cuerpo: imagen izquierda + texto derecha -->
         <div class="ctx-body">
           <!-- Imagen del personaje del nivel -->
-          @if (expandedCard()!.image) {
+          @if (isBored) {
+            <div class="bored-circle bored-circle--ctx" [style.background]="expandedCard()!.border"></div>
+          } @else if (expandedCard()!.image) {
             <img class="ctx-character" [src]="expandedCard()!.image" [alt]="expandedCard()!.title" />
           } @else {
             <div class="ctx-image" [style.background]="expandedCard()!.border"></div>
