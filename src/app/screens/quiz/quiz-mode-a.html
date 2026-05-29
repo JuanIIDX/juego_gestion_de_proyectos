@@ -21,7 +21,7 @@
             (dragend)="onDragEnd()"
             @chipIn>
             <span class="chip-text">{{ itemText(state.itemId) }}</span>
-            <button class="chip-btn chip-btn--right"
+            <button type="button" class="chip-btn chip-btn--right"
               (click)="moveItem(state.itemId, triple ? 'middle' : 'right'); $event.stopPropagation()"
               [disabled]="revealed()">▶</button>
             @if (revealed()) {
@@ -51,11 +51,11 @@
               (dragstart)="onDragStart(state.itemId, $event)"
               (dragend)="onDragEnd()"
               @chipIn>
-              <button class="chip-btn chip-btn--left"
+              <button type="button" class="chip-btn chip-btn--left"
                 (click)="moveItem(state.itemId, 'left'); $event.stopPropagation()"
                 [disabled]="revealed()">◀</button>
               <span class="chip-text">{{ itemText(state.itemId) }}</span>
-              <button class="chip-btn chip-btn--right"
+              <button type="button" class="chip-btn chip-btn--right"
                 (click)="moveItem(state.itemId, 'right'); $event.stopPropagation()"
                 [disabled]="revealed()">▶</button>
               @if (revealed()) {
@@ -85,7 +85,7 @@
             (dragstart)="onDragStart(state.itemId, $event)"
             (dragend)="onDragEnd()"
             @chipIn>
-            <button class="chip-btn chip-btn--left"
+            <button type="button" class="chip-btn chip-btn--left"
               (click)="moveItem(state.itemId, triple ? 'middle' : 'left'); $event.stopPropagation()"
               [disabled]="revealed()">◀</button>
             <span class="chip-text">{{ itemText(state.itemId) }}</span>
@@ -101,7 +101,7 @@
 
   @if (!revealed()) {
     <div class="btn-row" @fadeIn>
-      <button class="ok-btn"
+      <button type="button" class="ok-btn"
         [class.ok-btn--ready]="canConfirm()"
         [disabled]="!canConfirm()"
         (click)="confirm()">

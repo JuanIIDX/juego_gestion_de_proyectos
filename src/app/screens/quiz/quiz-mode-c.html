@@ -56,12 +56,12 @@
   <!-- Botones OK + Cancelar -->
   @if (!revealed()) {
     <div class="btn-row" @fadeIn>
-      <button class="cancel-btn"
+      <button type="button" class="cancel-btn"
         [disabled]="slots().every(s => s === null)"
         (click)="cancelLast()">
         ↩ Cancelar
       </button>
-      <button class="ok-btn"
+      <button type="button" class="ok-btn"
         [class.ok-btn--ready]="canConfirm()"
         [disabled]="!canConfirm()"
         (click)="confirm()">

@@ -99,7 +99,7 @@
 
   @if (!revealed()) {
     <div class="btn-row" @fadeIn>
-      <button class="ok-btn"
+      <button type="button" class="ok-btn"
         [class.ok-btn--ready]="canConfirm()"
         [disabled]="!canConfirm()"
         (click)="confirm()">

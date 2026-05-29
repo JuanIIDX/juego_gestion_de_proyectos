@@ -3,7 +3,7 @@
   <div class="tf-buttons">
 
     <!-- Botón ✓ CORRECTO (verde) -->
-    <button class="tf-btn tf-btn--circle"
+    <button type="button" class="tf-btn tf-btn--circle"
       [class.tf-btn--chosen]="chosen() === true"
       [class.tf-btn--correct]="isCorrectChoice(true)"
       [class.tf-btn--wrong]="isWrongChoice(true)"
@@ -30,7 +30,7 @@
     </button>
 
     <!-- Botón ✕ FALSO (rojo) -->
-    <button class="tf-btn tf-btn--cross"
+    <button type="button" class="tf-btn tf-btn--cross"
       [class.tf-btn--chosen]="chosen() === false"
       [class.tf-btn--correct]="isCorrectChoice(false)"
       [class.tf-btn--wrong]="isWrongChoice(false)"
