@@ -1,0 +1,186 @@
+<div class="home-screen"
+  [class.theme-day]="phase() === 'greeting' || phase() === 'level-select'"
+  [class.mode-fast]="spaceMode() === 'fast'"
+  [class.mode-faster]="spaceMode() === 'faster'"
+  [class.mode-chaos]="spaceMode() === 'chaos'"
+  (click)="phase() !== 'quiz' && onScreenTap()"
+  (touchstart)="phase() !== 'quiz' && onScreenTap()">
+
+  <!-- ══════════════════════════════
+       FONDO UNIVERSO ANIMADO
+  ══════════════════════════════ -->
+  <div class="space-bg">
+    <div class="stars stars-1"></div>
+    <div class="stars stars-2"></div>
+    <div class="stars stars-3"></div>
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="nebula nebula-3"></div>
+    <!-- Modo chaos: llamas/fuego -->
+    <div class="chaos-overlay"></div>
+    <div class="fire-particles">
+      @for (i of fireParticles; track i) {
+        <div class="fire-p" [style.left.%]="i.x" [style.animation-delay.s]="i.delay" [style.animation-duration.s]="i.dur"></div>
+      }
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       FASE: SALUDO
+  ══════════════════════════════ -->
+  @if (phase() === 'greeting') {
+    <div class="greeting-layout">
+
+      <!-- Indicador tap (cuando espera input) -->
+      @if (!isTyping()) {
+        <div class="tap-hint" @fadeIn>
+          <span class="tap-icon">▼</span>
+          <span class="tap-label">Toca para continuar</span>
+        </div>
+      }
+
+      <!-- Burbuja — UNA sola línea, reemplaza a la anterior -->
+      <div class="bubble-center" @bubbleEnter>
+        <div class="speech-bubble clickable">
+          <div class="bubble-body">
+            @switch (currentLineIndex()) {
+              @case (0) {
+                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
+              }
+              @case (1) {
+                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
+              }
+              @case (2) {
+                <div class="bubble-line" @lineSwap>{{ displayedLine() }}<span class="cursor" [class.visible]="isTyping()">▌</span></div>
+              }
+            }
+          </div>
+        </div>
+        <div class="tail-down"></div>
+      </div>
+
+      <!-- Personaje centrado -->
+      <div class="announcer-center" @announcerEnter>
+        <img class="character-img" [src]="characterImage()" alt="Personaje" />
+      </div>
+
+    </div>
+  }
+
+  <!-- ══════════════════════════════
+       FASE: QUIZ TEST
+  ══════════════════════════════ -->
+  @if (phase() === 'quiz') {
+    <app-quiz
+      [levelId]="selectedLevelId()"
+      [levelTitle]="getLevelTitle()"
+      [levelContext]="getLevelContext()"
+      (exit)="exitQuiz()"
+      (spaceModeChange)="onQuizSpaceMode($event)"
+      @fadeIn />
+  }
+
+  <!-- ══════════════════════════════
+       FASE: SELECCIÓN DE NIVEL
+  ══════════════════════════════ -->
+  @if (phase() === 'level-select') {
+    <div class="level-layout">
+
+      <!-- Cartas (izquierda 68%) -->
+      <div class="cards-area" @cardsDeal>
+        <div class="level-header" @fadeIn>
+          <h2 class="level-title">Selecciona un nivel</h2>
+</div>
+
+        <div class="cards-grid">
+          @for (level of levels; track level.id) {
+            <div class="level-card"
+              [class.card--test]="level.isTest"
+              [class.card--expanded]="expandedCard()?.id === level.id"
+              [@cardHover]="cardState(level.id)"
+              (mouseenter)="hoveredCard.set(level.id)"
+              (mouseleave)="hoveredCard.set(null)"
+              (click)="selectLevel(level); $event.stopPropagation()">
+              <div class="card-bg" [style.background]="level.color"></div>
+              <div class="card-glow" [style.background]="level.border"></div>
+              <div class="card-border" [style.border-color]="level.border"></div>
+              <div class="card-shine"></div>
+
+              <!-- Contenido normal del card -->
+              <div class="card-content">
+                <!-- Cuadrado de color (placeholder para imagen futura) -->
+                <div class="card-image-placeholder" [style.background]="level.border"></div>
+                <!-- Título abajo -->
+                <div class="card-title">{{ level.title }}</div>
+              </div>
+            </div>
+          }
+        </div>
+
+      </div>
+
+      <!-- Personaje (derecha 32%) -->
+      <div class="announcer-area" @announcerSlideIn>
+        @if (levelSelectLine()) {
+          <div class="bubble-side" @bubbleEnter>
+            <div class="speech-bubble speech-bubble--side">
+              <div class="bubble-body">
+                <div class="bubble-line bubble-line--small">
+                  {{ levelSelectLine() }}<span class="cursor" [class.visible]="isTypingLevelLine()">▌</span>
+                </div>
+              </div>
+            </div>
+            <div class="tail-right"></div>
+          </div>
+        }
+        <img class="character-img character-img--side" [src]="characterImage()" alt="Personaje" />
+      </div>
+
+    </div>
+  }
+
+  <!-- ══════════════════════════════
+       OVERLAY DE CONTEXTO (centrado sobre toda la pantalla)
+  ══════════════════════════════ -->
+  @if (expandedCard()) {
+    <div class="ctx-backdrop" @cardExpand (click)="closeExpanded($event)">
+      <div class="ctx-modal" [style.--accent]="expandedCard()!.border"
+        (click)="$event.stopPropagation()">
+
+        <!-- Botón cerrar -->
+        <button class="ctx-close" (click)="closeExpanded($event)">✕</button>
+
+        <!-- Título grande arriba -->
+        <div class="ctx-header" [style.border-color]="expandedCard()!.border">
+          <h2 class="ctx-title">{{ expandedCard()!.displayTitle ?? expandedCard()!.title }}</h2>
+        </div>
+
+        <!-- Cuerpo: imagen izquierda + texto derecha -->
+        <div class="ctx-body">
+          <!-- Placeholder imagen (cuadrado del color del nivel) -->
+          <div class="ctx-image" [style.background]="expandedCard()!.border"></div>
+
+          <!-- Texto del contexto -->
+          <div class="ctx-text">
+            @if (expandedCard()!.context) {
+              <p>{{ expandedCard()!.context }}</p>
+            } @else {
+              <p class="ctx-placeholder">El contexto de este nivel estará disponible próximamente.</p>
+            }
+          </div>
+        </div>
+
+        <!-- Footer con botón -->
+        <div class="ctx-footer">
+          <button class="ctx-start"
+            [style.background]="expandedCard()!.border"
+            (click)="startLevel(expandedCard()!, $event)">
+            Comenzar desafío →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

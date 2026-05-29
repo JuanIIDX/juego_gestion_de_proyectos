@@ -1,0 +1,47 @@
+<div class="welcome-screen">
+  <!-- Cosmic scrolling background -->
+  <div class="stars-layer stars-slow"></div>
+  <div class="stars-layer stars-mid"></div>
+  <div class="stars-layer stars-fast"></div>
+  <div class="nebula nebula-1"></div>
+  <div class="nebula nebula-2"></div>
+
+  <!-- Floating particles -->
+  <div class="particles">
+    @for (p of particles; track p.delay) {
+      <span class="particle"
+        [style.left.%]="p.x"
+        [style.top.%]="p.y"
+        [style.animationDelay]="p.delay + 's'"
+        [style.width.px]="p.size"
+        [style.height.px]="p.size">
+      </span>
+    }
+  </div>
+
+  <div class="content">
+    <div class="logo-wrapper" @titleAnim>
+      <div class="crown">👑</div>
+      <h1 class="title">
+        <span class="title-line">Gestión de</span>
+        <span class="title-line accent">Mercados</span>
+      </h1>
+      <p class="subtitle">Recuerdenme cambiar los rectangulos aaaaa</p>
+    </div>
+
+    <div class="decorative-row" @fadeInUp>
+      <span class="deco-icon">⚔️</span>
+      <span class="deco-line"></span>
+      <span class="deco-icon">🛡️</span>
+      <span class="deco-line"></span>
+      <span class="deco-icon">🔮</span>
+    </div>
+
+    <button class="start-btn" (click)="start()" [class.clicked]="clicked" @fadeInUp>
+      <span class="btn-glow"></span>
+      <span class="btn-text">✨ COMENZAR</span>
+    </button>
+
+    <p class="version" @fadeInUp>v1.0 &nbsp;•&nbsp; Hasta 10 héroes</p>
+  </div>
+</div>

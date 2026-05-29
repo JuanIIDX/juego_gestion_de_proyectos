@@ -1,0 +1,30 @@
+<div class="mode-d" @optionsIn>
+
+  @for (opt of options; track opt.id; let i = $index) {
+    <div class="choice-row"
+      [class.choice-row--selected]="selectedId() === opt.id && !revealed()"
+      [class.choice-row--correct]="isRight(opt.id)"
+      [class.choice-row--wrong]="isWrong(opt.id)"
+      [class.choice-row--dim]="revealed() && selectedId() !== opt.id && !isRight(opt.id)"
+      [@selectFlash]="optionState(opt.id)"
+      (click)="select(opt.id)">
+
+      <!-- Badge numérico -->
+      <div class="choice-badge" [class]="'badge-' + opt.id">
+        {{ opt.id }}
+      </div>
+
+      <!-- Texto -->
+      <div class="choice-label">{{ opt.text }}</div>
+
+      <!-- Resultado tras reveal -->
+      @if (revealed() && (isRight(opt.id) || isWrong(opt.id))) {
+        <div class="choice-result" @resultBadge>
+          {{ isRight(opt.id) ? '○' : '✕' }}
+        </div>
+      }
+
+    </div>
+  }
+
+</div>

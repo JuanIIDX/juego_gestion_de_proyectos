@@ -1,0 +1,270 @@
+/* ═══════════════════════════════════════
+   MODO E — VERDADERO / FALSO
+═══════════════════════════════════════ */
+.mode-e {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* Fila con los dos botones */
+.tf-buttons {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ── Botón base ── */
+.tf-btn {
+  width: 280px;
+  height: 280px;
+  flex-shrink: 0;
+  border-radius: 22px;
+  border: 6px solid;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.2s, filter 0.3s, opacity 0.3s;
+
+  &:hover:not(:disabled):not(.tf-btn--dim) {
+    transform: scale(1.06) translateY(-5px);
+  }
+  &:active:not(:disabled) { transform: scale(0.95); }
+
+  &.tf-btn--dim {
+    opacity: 0.22;
+    filter: grayscale(0.5);
+    cursor: default;
+  }
+}
+
+/* ── Botón ✓ (verde) ── */
+.tf-btn--circle {
+  background: linear-gradient(145deg, #dcfce7, #f0fdf4);
+  border-color: #16a34a;
+  box-shadow:
+    0 8px 32px rgba(22,163,74,0.35),
+    0 0 0 2px rgba(22,163,74,0.15),
+    inset 0 2px 0 rgba(255,255,255,0.6);
+
+  &:hover:not(:disabled):not(.tf-btn--dim) {
+    box-shadow: 0 14px 48px rgba(22,163,74,0.55), 0 0 30px rgba(22,163,74,0.3), inset 0 2px 0 rgba(255,255,255,0.6);
+  }
+
+  &.tf-btn--correct {
+    background: linear-gradient(145deg, #bbf7d0, #dcfce7);
+    box-shadow: 0 0 50px rgba(22,163,74,0.9), 0 0 100px rgba(22,163,74,0.4);
+    animation: correct-glow 0.6s ease-out;
+  }
+  &.tf-btn--wrong {
+    background: linear-gradient(145deg, #fee2e2, #fff1f1);
+    border-color: #dc2626;
+    box-shadow: 0 0 40px rgba(220,38,38,0.7);
+    animation: btn-shake 0.45s ease-out;
+  }
+}
+
+/* ── Botón ✕ (rojo) ── */
+.tf-btn--cross {
+  background: linear-gradient(145deg, #fee2e2, #fff1f1);
+  border-color: #dc2626;
+  box-shadow:
+    0 8px 32px rgba(220,38,38,0.35),
+    0 0 0 2px rgba(220,38,38,0.15),
+    inset 0 2px 0 rgba(255,255,255,0.6);
+
+  &:hover:not(:disabled):not(.tf-btn--dim) {
+    box-shadow: 0 14px 48px rgba(220,38,38,0.55), 0 0 30px rgba(220,38,38,0.3), inset 0 2px 0 rgba(255,255,255,0.6);
+  }
+
+  &.tf-btn--correct {
+    background: linear-gradient(145deg, #bbf7d0, #dcfce7);
+    border-color: #16a34a;
+    box-shadow: 0 0 50px rgba(22,163,74,0.9), 0 0 100px rgba(22,163,74,0.4);
+    animation: correct-glow 0.6s ease-out;
+  }
+  &.tf-btn--wrong {
+    background: linear-gradient(145deg, #fecaca, #fee2e2);
+    box-shadow: 0 0 40px rgba(220,38,38,0.8);
+    animation: btn-shake 0.45s ease-out;
+  }
+}
+
+@keyframes btn-shake {
+  0%,100% { transform: translateX(0) rotate(0); }
+  20%     { transform: translateX(-10px) rotate(-2deg); }
+  40%     { transform: translateX(10px)  rotate(2deg); }
+  60%     { transform: translateX(-6px)  rotate(-1deg); }
+  80%     { transform: translateX(6px)   rotate(1deg); }
+}
+
+@keyframes correct-glow {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* ── Símbolo SVG-like usando CSS ── */
+.tf-symbol {
+  pointer-events: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px;
+  height: 160px;
+  transition: transform 0.3s;
+
+  .tf-btn:hover:not(:disabled):not(.tf-btn--dim) & {
+    transform: scale(1.08);
+  }
+}
+
+/* Chulo dibujado con CSS (más limpio que el carácter Unicode) */
+.checkmark {
+  width: 130px;
+  height: 130px;
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    background: #16a34a;
+    border-radius: 6px;
+    transition: background 0.3s;
+  }
+  /* Brazo corto (izquierdo-abajo) */
+  &::before {
+    width: 14px;
+    height: 60px;
+    bottom: 12px;
+    left: 26px;
+    transform: rotate(45deg);
+    transform-origin: bottom center;
+  }
+  /* Brazo largo (derecha-arriba) */
+  &::after {
+    width: 14px;
+    height: 100px;
+    bottom: 12px;
+    left: 56px;
+    transform: rotate(-50deg);
+    transform-origin: bottom center;
+  }
+
+  .tf-btn--wrong   & { &::before, &::after { background: #dc2626; } }
+  .tf-btn--correct & { &::before, &::after { background: #15803d; } }
+}
+
+/* Cruz dibujada con CSS */
+.crossmark {
+  width: 130px;
+  height: 130px;
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 120px;
+    background: #dc2626;
+    border-radius: 7px;
+    top: 5px;
+    left: 50%;
+    transform-origin: center center;
+    transition: background 0.3s;
+  }
+  &::before { transform: translateX(-50%) rotate(45deg); }
+  &::after  { transform: translateX(-50%) rotate(-45deg); }
+
+  .tf-btn--correct & { &::before, &::after { background: #15803d; } }
+  .tf-btn--wrong   & { &::before, &::after { background: #b91c1c; } }
+}
+
+/* ── Veredicto que aparece encima al revelar ── */
+.tf-verdict {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(3px);
+  border-radius: 16px;
+}
+
+.verdict-check {
+  width: 120px;
+  height: 120px;
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 6px;
+  }
+  &::before {
+    width: 14px; height: 55px;
+    bottom: 10px; left: 22px;
+    transform: rotate(45deg);
+    transform-origin: bottom center;
+  }
+  &::after {
+    width: 14px; height: 90px;
+    bottom: 10px; left: 52px;
+    transform: rotate(-50deg);
+    transform-origin: bottom center;
+  }
+
+  .tf-btn--correct & {
+    &::before, &::after { background: #15803d; }
+  }
+  .tf-btn--wrong & {
+    &::before, &::after { background: #b91c1c; }
+  }
+}
+
+.verdict-cross {
+  width: 110px;
+  height: 110px;
+  position: relative;
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    width: 14px; height: 110px;
+    border-radius: 7px;
+    top: 0; left: 50%;
+    transform-origin: center center;
+  }
+  &::before { transform: translateX(-50%) rotate(45deg); }
+  &::after  { transform: translateX(-50%) rotate(-45deg); }
+
+  .tf-btn--correct & { &::before, &::after { background: #15803d; } }
+  .tf-btn--wrong   & { &::before, &::after { background: #b91c1c; } }
+}
+
+/* Etiqueta debajo del botón */
+.tf-label {
+  position: absolute;
+  bottom: 14px;
+  font-family: 'Georgia', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+
+  .tf-btn--circle & { color: #15803d; }
+  .tf-btn--cross  & { color: #b91c1c; }
+}

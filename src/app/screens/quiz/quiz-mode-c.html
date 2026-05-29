@@ -1,0 +1,73 @@
+<div class="mode-c">
+
+  <!-- Casillas de orden (arriba) -->
+  <div class="slots-row" @slotIn>
+    @for (slot of slots(); track trackByIndex($index); let i = $index; let last = $last) {
+      <div class="slot"
+        [class.slot--filled]="slot !== null"
+        [class.slot--correct]="revealed() && isSlotCorrect(i)"
+        [class.slot--wrong]="revealed() && slot !== null && !isSlotCorrect(i)"
+        (click)="clickSlot(i)">
+
+        @if (slot !== null) {
+          <div class="slot-chip" @chipDrop>
+            <span class="slot-chip-letter">{{ slot }}</span>
+            <span class="slot-chip-text">{{ optionTextForSlot(i) }}</span>
+          </div>
+        }
+
+        @if (revealed() && slot !== null) {
+          <div class="slot-result" @resultPop>{{ isSlotCorrect(i) ? '○' : '✕' }}</div>
+        }
+
+        @if (slot === null) {
+          <span class="slot-pos">{{ i + 1 }}</span>
+        }
+      </div>
+
+      @if (!last) {
+        <div class="slot-arrow">▶</div>
+      }
+    }
+  </div>
+
+  <!-- Opciones A / B / C (clic directo coloca en el siguiente slot vacío) -->
+  <div class="options-area">
+    @for (opt of availableOptions(); track opt.id; let i = $index) {
+      <div class="option-row"
+        (click)="selectOption(opt.id)"
+        @optionIn>
+        <div class="option-badge">{{ opt.id }}</div>
+        <div class="option-label">{{ opt.text }}</div>
+      </div>
+    }
+
+    @if (availableOptions().length === 0 && !revealed()) {
+      <div class="options-empty" @fadeIn>¡Todas colocadas! Pulsa OK para confirmar.</div>
+    }
+  </div>
+
+  <div class="hint" @fadeIn>
+    @if (!revealed() && availableOptions().length > 0) {
+      Toca una opción para colocarla en el siguiente slot · Toca un slot para quitarla
+    }
+  </div>
+
+  <!-- Botones OK + Cancelar -->
+  @if (!revealed()) {
+    <div class="btn-row" @fadeIn>
+      <button class="cancel-btn"
+        [disabled]="slots().every(s => s === null)"
+        (click)="cancelLast()">
+        ↩ Cancelar
+      </button>
+      <button class="ok-btn"
+        [class.ok-btn--ready]="canConfirm()"
+        [disabled]="!canConfirm()"
+        (click)="confirm()">
+        OK
+      </button>
+    </div>
+  }
+
+</div>

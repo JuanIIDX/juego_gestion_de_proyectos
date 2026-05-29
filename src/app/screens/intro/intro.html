@@ -1,0 +1,349 @@
+<div class="intro-screen"
+  (keydown)="onConfirmKey($event)"
+  (click)="onScreenClick()"
+  tabindex="0">
+
+  <!-- ══════════════════════════════════════════
+       HEADER — match results + used topic icons
+  ══════════════════════════════════════════ -->
+  @if (isRoulettePhase()) {
+    <div class="game-header" @slideDown>
+
+      <!-- Line 1: all rounds history — round number + winner✕loser chips -->
+      <div class="header-results-row">
+        @for (round of headerAllRounds(); track $index; let ri = $index) {
+          <span class="header-round-label">{{ ri + 1 }}</span>
+          @for (r of round; track $index) {
+            <div class="header-match-chip" @fadeIn>
+              <div class="header-chip-square" [style.background]="r.winner.color">
+                <span class="header-chip-num">{{ playerNumber(r.winner) }}</span>
+              </div>
+              <span class="header-chip-x">✕</span>
+              <div class="header-chip-square header-chip-loser" [style.background]="r.loser.color">
+                <span class="header-chip-num">{{ playerNumber(r.loser) }}</span>
+              </div>
+            </div>
+          }
+        }
+        @if (headerAllRounds().length === 0) {
+          <span class="header-round-label">{{ roundNumber() }}</span>
+        }
+      </div>
+
+      <!-- Line 2: icons of ALL topics used so far, in bright green -->
+      <div class="header-topic-row">
+        @if (usedTopicIcons().length === 0) {
+          <span class="header-topic-placeholder">— tema por determinar —</span>
+        }
+        @for (icon of usedTopicIcons(); track icon) {
+          <span class="header-used-icon" @fadeIn>{{ icon }}</span>
+        }
+      </div>
+
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════
+       TOP AREA — player rects OR nothing
+  ══════════════════════════════════════════ -->
+  <div class="top-area">
+    @if (phase() === 'player-count' || phase() === 'confirm') {
+      <div class="players-row" @slideDown>
+        @for (p of players(); track p.id; let i = $index) {
+          <div class="player-rect"
+            [style.background]="p.color"
+            [class.drag-over]="dragOverIndex() === i"
+            [class.dragging]="dragIndex() === i"
+            draggable="true"
+            (dragstart)="onDragStart(i, $event)"
+            (dragover)="onDragOver(i, $event)"
+            (drop)="onDrop(i, $event)"
+            (dragend)="onDragEnd()">
+            <div class="player-label">{{ i + 2 }}P</div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       MIDDLE AREA — announcer column only
+  ══════════════════════════════════════════ -->
+  <div class="middle-area">
+
+    <div class="center-col">
+      <div class="announcer-col">
+
+        <!-- Bubble: always in DOM, fades in/out -->
+        <div class="speech-bubble"
+          [class.bubble-visible]="showBubble() || phase() === 'confirm'"
+          [class.bubble-clickable]="phase() === 'dialog'"
+          [class.bubble-expanded]="bubbleExpanded()"
+          [style.min-height.px]="bubbleExpanded() && bubblePresetHeight() ? bubblePresetHeight() : null">
+          <div class="bubble-inner" [class.confirm-lines]="phase() === 'confirm'">
+            <div class="bubble-lines">
+              @if (phase() === 'confirm') {
+                <div class="bubble-line">¿Así quedamos con</div>
+                <div class="bubble-line">{{ playerCount }} jugadores?</div>
+                <div class="bubble-line"></div>
+              } @else if (phase() === 'topic-reveal') {
+                @for (line of visibleLines(); track $index; let i = $index) {
+                  <div class="bubble-line" [class.topic-title-line]="i === 0">{{ line }}<span class="cursor" [class.visible]="isTyping() && i === visibleLines().length - 1">▌</span></div>
+                }
+              } @else {
+                @for (line of visibleLines(); track $index) {
+                  <div class="bubble-line">{{ line }}<span class="cursor" [class.visible]="isTyping() && $index === cursorLineIndex()">▌</span></div>
+                }
+              }
+            </div>
+          </div>
+          @if (!isTyping() && phase() === 'dialog') {
+            <div class="bubble-prompt" @fadeIn><span class="prompt-arrow">▼</span></div>
+          }
+        </div>
+
+        <!-- Announcer row: [red slot] [－] [square] [＋] [blue slot] -->
+        <div class="announcer-row">
+
+          <!-- Red roulette slot (left of announcer) -->
+          <div class="side-slot left-slot">
+            @if (showRedRoulette()) {
+              <div class="roulette-wrap" @slideLeft>
+                <div class="roulette-tag red-tag">ROJO</div>
+                <div class="roulette-machine red-machine">
+                  <div class="selector-bar"></div>
+                  <div class="roulette-strip"
+                    [style.transform]="'translateY(' + redOffset() + 'px)'"
+                    [style.transition]="redSpinning() ? 'transform 0.06s linear' : 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)'">
+                    @for (n of redPool; track n) {
+                      <div class="roulette-cell" [class.center-cell]="redCurrent() === n">{{ n }}</div>
+                    }
+                  </div>
+                  <div class="fade-top"></div>
+                  <div class="fade-bot"></div>
+                </div>
+              </div>
+            }
+          </div>
+
+          @if (phase() === 'player-count') {
+            <button class="count-btn minus" @fadeIn (click)="removePlayer(); $event.stopPropagation()" [disabled]="playerCount <= 2">－</button>
+          } @else {
+            <div class="count-btn-placeholder"></div>
+          }
+
+          <div class="announcer"></div>
+
+          @if (phase() === 'player-count') {
+            <button class="count-btn plus" @fadeIn (click)="addPlayer(); $event.stopPropagation()" [disabled]="playerCount >= 10">＋</button>
+          } @else {
+            <div class="count-btn-placeholder"></div>
+          }
+
+          <!-- Blue roulette slot (right of announcer) -->
+          <div class="side-slot right-slot">
+            @if (showBlueRoulette()) {
+              <div class="roulette-wrap" @slideRight>
+                <div class="roulette-tag blue-tag">AZUL</div>
+                <div class="roulette-machine blue-machine">
+                  <div class="selector-bar"></div>
+                  <div class="roulette-strip"
+                    [style.transform]="'translateY(' + blueOffset() + 'px)'"
+                    [style.transition]="blueSpinning() ? 'transform 0.06s linear' : 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)'">
+                    @for (n of bluePool; track n) {
+                      <div class="roulette-cell" [class.center-cell]="blueCurrent() === n">{{ n }}</div>
+                    }
+                  </div>
+                  <div class="fade-top"></div>
+                  <div class="fade-bot"></div>
+                </div>
+              </div>
+            }
+          </div>
+
+        </div>
+
+        <!-- Green roulette: below the announcer row -->
+        @if (showGreenRoulette()) {
+          <div class="roulette-green-wrap" @slideUp>
+            <div class="roulette-green-machine">
+              <div class="green-selector-bar"></div>
+              <div class="green-strip-viewport">
+                <div class="green-strip"
+                  [style.transform]="'translateX(' + greenOffset() + 'px)'"
+                  [style.transition]="greenSpinning() ? 'transform 0.06s linear' : 'transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94)'">
+                  @for (icon of greenPool; track icon) {
+                    <div class="green-cell" [class.center-cell]="greenCurrent() === icon">{{ icon }}</div>
+                  }
+                </div>
+              </div>
+              <div class="fade-left"></div>
+              <div class="fade-right"></div>
+            </div>
+          </div>
+        }
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       ACCEPT / CHOICE (below middle)
+  ══════════════════════════════════════════ -->
+  @if (phase() === 'player-count') {
+    <div class="accept-area" @slideDown>
+      <button class="accept-btn" (click)="acceptPlayerCount()">Aceptar</button>
+    </div>
+  }
+
+  @if (phase() === 'confirm') {
+    <div class="choice-area" @slideDown>
+      <div class="choice-box">
+        <div class="choice-option" [class.selected]="confirmSelected() === 0" (click)="confirmChoice(0)">
+          <span class="choice-cursor" [class.visible]="confirmSelected() === 0">▶</span>Sí
+        </div>
+        <div class="choice-option" [class.selected]="confirmSelected() === 1" (click)="confirmChoice(1)">
+          <span class="choice-cursor" [class.visible]="confirmSelected() === 1">▶</span>No
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════════
+       PLAYER RESULT PANELS (slide in from sides)
+  ══════════════════════════════════════════ -->
+  @if (redResult() !== null && leftPanelColor()) {
+    <div class="player-panel panel-left" @slideInLeft
+      [style.background]="leftPanelColor()">
+      <div class="panel-player-label">{{ leftPanelLabel() }}</div>
+      @if (showPlayerInputs()) {
+        <button class="panel-check-btn" @fadeIn
+          (click)="declareWinner('left'); $event.stopPropagation()">✓</button>
+      }
+    </div>
+  }
+  @if (blueResult() !== null && rightPanelColor()) {
+    <div class="player-panel panel-right" @slideInRight
+      [style.background]="rightPanelColor()!">
+      <div class="panel-player-label">{{ rightPanelLabel() }}</div>
+      @if (showPlayerInputs()) {
+        <button class="panel-check-btn" @fadeIn
+          (click)="declareWinner('right'); $event.stopPropagation()">✓</button>
+      }
+    </div>
+  }
+
+
+  <!-- ══════════════════════════════════════════
+       PLAYER INPUT BUBBLES (appear after topic reveal)
+  ══════════════════════════════════════════ -->
+  @if (showPlayerInputs()) {
+    @let matchup = currentMatchup();
+    @if (matchup) {
+      <!-- Left bubble: p1 -->
+      <div class="player-input-bubble input-bubble-left"
+        [style.--panel-color]="matchup.p1.color"
+        @slideUp>
+        <div class="input-bubble-header" [style.background]="matchup.p1.color">
+          <span class="input-bubble-player">{{ leftPanelLabel() }}</span>
+          <span class="input-bubble-label">Respuesta</span>
+        </div>
+        <textarea class="input-bubble-text"
+          placeholder="Escribe la respuesta..."
+          [value]="playerAnswers()[0]"
+          (input)="updateAnswer(0, $any($event.target).value)"
+          (click)="$event.stopPropagation()">
+        </textarea>
+      </div>
+      <!-- Right bubble: p2 -->
+      @if (matchup.p2) {
+        <div class="player-input-bubble input-bubble-right"
+          [style.--panel-color]="matchup.p2.color"
+          @slideUp>
+          <div class="input-bubble-header" [style.background]="matchup.p2.color">
+            <span class="input-bubble-player">{{ rightPanelLabel() }}</span>
+            <span class="input-bubble-label">Respuesta</span>
+          </div>
+          <textarea class="input-bubble-text"
+            placeholder="Escribe la respuesta..."
+            [value]="playerAnswers()[1]"
+            (input)="updateAnswer(1, $any($event.target).value)"
+            (click)="$event.stopPropagation()">
+          </textarea>
+        </div>
+      }
+    }
+  }
+
+  <!-- ══════════════════════════════════════════
+       FOOTER (invisible placeholder + timer bar)
+  ══════════════════════════════════════════ -->
+  <div class="footer">
+    @if (showPlayerInputs()) {
+      <div class="timer-bar-wrap" @slideDown>
+        <div class="timer-countdown">{{ timerDisplay() }}</div>
+        <div class="timer-track">
+          <div class="timer-fill"
+            [style.width.%]="timerProgress() * 100"
+            [class.timer-danger]="timerSeconds() <= 60"
+            [class.timer-warning]="timerSeconds() > 60 && timerSeconds() <= 120">
+          </div>
+          <div class="timer-bomb-container"
+            [style.left.%]="timerProgress() * 100"
+            [class.bomb-warn]="timerSeconds() <= 120 && timerSeconds() > 60"
+            [class.bomb-danger]="timerSeconds() <= 60">
+            <span class="timer-bomb-emoji"
+              [style.font-size.rem]="1 + timerProgress() * 3">💣</span>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       DEBUG OVERLAY (?debug=1)
+  ══════════════════════════════════════════ -->
+  @if (debugMode) {
+    <!-- Box highlights over each element -->
+    @for (info of debugInfos(); track info.cssClass) {
+      <div class="dbg-box"
+        [style.left.px]="info.left"
+        [style.top.px]="info.top"
+        [style.width.px]="info.w"
+        [style.height.px]="info.h"
+        (mouseenter)="debugHovered.set(info.cssClass)"
+        (mouseleave)="debugHovered.set(null)">
+        <span class="dbg-box-label">{{ info.label }}</span>
+        @if (debugHovered() === info.cssClass) {
+          <div class="dbg-tooltip">
+            <div class="dbg-tt-title">{{ info.label }}</div>
+            <div class="dbg-tt-row"><b>clase:</b> .{{ info.cssClass }}</div>
+            <div class="dbg-tt-row"><b>tamaño:</b> {{ info.w }} × {{ info.h }} px</div>
+            <div class="dbg-tt-row"><b>top:</b> {{ info.top }} px</div>
+            <div class="dbg-tt-row"><b>left:</b> {{ info.left }} px</div>
+            <div class="dbg-tt-row"><b>margin-bottom:</b> {{ info.marginBottom }} px</div>
+            <div class="dbg-tt-row"><b>margin-right:</b> {{ info.marginRight }} px</div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Side panel with all elements listed -->
+    <div class="dbg-panel">
+      <div class="dbg-panel-title">🛠 DEBUG</div>
+      @for (info of debugInfos(); track info.cssClass) {
+        <div class="dbg-panel-row"
+          [class.dbg-panel-hovered]="debugHovered() === info.cssClass"
+          (mouseenter)="debugHovered.set(info.cssClass)"
+          (mouseleave)="debugHovered.set(null)">
+          <span class="dbg-pname">{{ info.label }}</span>
+          <span class="dbg-psize">{{ info.w }}×{{ info.h }}</span>
+          <span class="dbg-ppos">↕{{ info.top }} ↔{{ info.left }}</span>
+          <span class="dbg-pmb">mb:{{ info.marginBottom }}</span>
+        </div>
+      }
+    </div>
+  }
+
+</div>

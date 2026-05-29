@@ -1,0 +1,113 @@
+<div class="mode-a" [class.mode-a--triple]="triple">
+
+  <div class="panels-row">
+
+    <!-- ══ PANEL A (izquierdo) — todos los chips empiezan aquí ══ -->
+    <div class="panel panel-left"
+      [@panelPulse]="panelState('left')"
+      [class.panel--hover]="hoveredPanel() === 'left'"
+      (dragover)="onDragOver('left', $event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop('left', $event)">
+      <div class="panel-label">{{ question.leftLabel }}</div>
+      <div class="panel-letter">A</div>
+      <div class="panel-chips">
+        @for (state of leftItems(); track state.itemId) {
+          <div class="answer-chip chip-in-panel"
+            [class.chip--correct]="revealed() && isItemCorrect(state)"
+            [class.chip--wrong]="revealed() && !isItemCorrect(state)"
+            draggable="true"
+            (dragstart)="onDragStart(state.itemId, $event)"
+            (dragend)="onDragEnd()"
+            @chipIn>
+            <span class="chip-text">{{ itemText(state.itemId) }}</span>
+            <button class="chip-btn chip-btn--right"
+              (click)="moveItem(state.itemId, triple ? 'middle' : 'right'); $event.stopPropagation()"
+              [disabled]="revealed()">▶</button>
+            @if (revealed()) {
+              <span class="chip-result" @resultFlash>{{ isItemCorrect(state) ? '✓' : '✕' }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- ══ PANEL B central (solo Modo F) ══ -->
+    @if (triple) {
+      <div class="panel panel-middle"
+        [@panelPulse]="panelState('middle')"
+        [class.panel--hover]="hoveredPanel() === 'middle'"
+        (dragover)="onDragOver('middle', $event)"
+        (dragleave)="onDragLeave()"
+        (drop)="onDrop('middle', $event)">
+        <div class="panel-label">{{ question.centerLabel }}</div>
+        <div class="panel-letter">B</div>
+        <div class="panel-chips">
+          @for (state of middleItems(); track state.itemId) {
+            <div class="answer-chip chip-in-panel"
+              [class.chip--correct]="revealed() && isItemCorrect(state)"
+              [class.chip--wrong]="revealed() && !isItemCorrect(state)"
+              draggable="true"
+              (dragstart)="onDragStart(state.itemId, $event)"
+              (dragend)="onDragEnd()"
+              @chipIn>
+              <button class="chip-btn chip-btn--left"
+                (click)="moveItem(state.itemId, 'left'); $event.stopPropagation()"
+                [disabled]="revealed()">◀</button>
+              <span class="chip-text">{{ itemText(state.itemId) }}</span>
+              <button class="chip-btn chip-btn--right"
+                (click)="moveItem(state.itemId, 'right'); $event.stopPropagation()"
+                [disabled]="revealed()">▶</button>
+              @if (revealed()) {
+                <span class="chip-result" @resultFlash>{{ isItemCorrect(state) ? '✓' : '✕' }}</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- ══ PANEL B/C (derecho) ══ -->
+    <div class="panel panel-right"
+      [@panelPulse]="panelState('right')"
+      [class.panel--hover]="hoveredPanel() === 'right'"
+      (dragover)="onDragOver('right', $event)"
+      (dragleave)="onDragLeave()"
+      (drop)="onDrop('right', $event)">
+      <div class="panel-label">{{ question.rightLabel }}</div>
+      <div class="panel-letter">{{ triple ? 'C' : 'B' }}</div>
+      <div class="panel-chips">
+        @for (state of rightItems(); track state.itemId) {
+          <div class="answer-chip chip-in-panel"
+            [class.chip--correct]="revealed() && isItemCorrect(state)"
+            [class.chip--wrong]="revealed() && !isItemCorrect(state)"
+            draggable="true"
+            (dragstart)="onDragStart(state.itemId, $event)"
+            (dragend)="onDragEnd()"
+            @chipIn>
+            <button class="chip-btn chip-btn--left"
+              (click)="moveItem(state.itemId, triple ? 'middle' : 'left'); $event.stopPropagation()"
+              [disabled]="revealed()">◀</button>
+            <span class="chip-text">{{ itemText(state.itemId) }}</span>
+            @if (revealed()) {
+              <span class="chip-result" @resultFlash>{{ isItemCorrect(state) ? '✓' : '✕' }}</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  @if (!revealed()) {
+    <div class="btn-row" @fadeIn>
+      <button class="ok-btn"
+        [class.ok-btn--ready]="canConfirm()"
+        [disabled]="!canConfirm()"
+        (click)="confirm()">
+        OK
+      </button>
+    </div>
+  }
+
+</div>

@@ -1,0 +1,213 @@
+.debug-page {
+  min-height: 100vh;
+  background: #0d1117;
+  color: #e6edf3;
+  font-family: 'Segoe UI', monospace;
+  padding: 1.2rem 2rem 3rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.debug-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #58a6ff;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #21262d;
+  padding-bottom: 0.8rem;
+}
+
+.debug-section {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 10px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+
+  h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #79c0ff;
+    margin: 0 0 0.4rem;
+  }
+}
+
+.debug-desc {
+  font-size: 0.88rem;
+  color: #8b949e;
+  margin: 0 0 1.2rem;
+}
+
+.dbg-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+
+  label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  input, textarea {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: #e6edf3;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 0.6rem 0.8rem;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.15s;
+
+    &:focus { border-color: #58a6ff; }
+  }
+}
+
+.models-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.models-filter-input {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  color: #e6edf3;
+  font-family: inherit;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.8rem;
+  outline: none;
+  width: 280px;
+  transition: border-color 0.15s;
+  &:focus { border-color: #58a6ff; }
+}
+
+.models-count {
+  font-size: 0.8rem;
+  color: #8b949e;
+}
+
+.models-table-wrap {
+  overflow-x: auto;
+  border: 1px solid #21262d;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.models-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+
+  th {
+    background: #21262d;
+    color: #8b949e;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    padding: 0.6rem 1rem;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.55rem 1rem;
+    border-top: 1px solid #21262d;
+    vertical-align: middle;
+    color: #c9d1d9;
+  }
+
+  tr:hover td { background: rgba(88,166,255,0.04); }
+}
+
+.model-id {
+  font-family: monospace;
+  font-size: 0.78rem;
+  color: #79c0ff;
+  white-space: nowrap;
+}
+
+.method-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: #21262d;
+  color: #8b949e;
+  border: 1px solid #30363d;
+  margin: 0.1rem 0.2rem 0.1rem 0;
+  white-space: nowrap;
+
+  &.method-generate {
+    background: rgba(35,134,54,0.2);
+    border-color: #2ea043;
+    color: #3fb950;
+    font-weight: 600;
+  }
+}
+
+.dbg-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+
+.dbg-btn {
+  background: #238636;
+  border: 1px solid #2ea043;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.6rem 1.6rem;
+  transition: background 0.15s, opacity 0.15s;
+
+  &:hover:not(:disabled) { background: #2ea043; }
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+}
+
+.dbg-result {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  &.ok    { background: rgba(35,134,54,0.15); border: 1px solid #2ea043; color: #3fb950; }
+  &.error { background: rgba(218,54,51,0.15); border: 1px solid #da3633; color: #f85149; }
+}
+
+.dbg-verdict {
+  margin-top: 1.2rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #30363d;
+}
+
+.verdict-winner {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.8rem 1.2rem;
+
+  &.winner-left  { background: rgba(231,76,60,0.2);  color: #e74c3c; }
+  &.winner-right { background: rgba(52,152,219,0.2); color: #3498db; }
+}
+
+.verdict-reason {
+  padding: 0.8rem 1.2rem;
+  font-size: 0.95rem;
+  color: #c9d1d9;
+  line-height: 1.6;
+  background: #0d1117;
+}

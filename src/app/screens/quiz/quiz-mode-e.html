@@ -1,0 +1,61 @@
+<div class="mode-e">
+
+  <div class="tf-buttons">
+
+    <!-- Botón ✓ CORRECTO (verde) -->
+    <button class="tf-btn tf-btn--circle"
+      [class.tf-btn--chosen]="chosen() === true"
+      [class.tf-btn--correct]="isCorrectChoice(true)"
+      [class.tf-btn--wrong]="isWrongChoice(true)"
+      [class.tf-btn--dim]="revealed() && chosen() !== true"
+      (click)="pick(true)"
+      [disabled]="revealed()"
+      @btnIn>
+
+      <div class="tf-symbol">
+        <div class="checkmark"></div>
+      </div>
+
+      <span class="tf-label">VERDADERO</span>
+
+      @if (revealed() && chosen() === true) {
+        <div class="tf-verdict" @resultBoom>
+          @if (isCorrectChoice(true)) {
+            <div class="verdict-check"></div>
+          } @else {
+            <div class="verdict-cross"></div>
+          }
+        </div>
+      }
+    </button>
+
+    <!-- Botón ✕ FALSO (rojo) -->
+    <button class="tf-btn tf-btn--cross"
+      [class.tf-btn--chosen]="chosen() === false"
+      [class.tf-btn--correct]="isCorrectChoice(false)"
+      [class.tf-btn--wrong]="isWrongChoice(false)"
+      [class.tf-btn--dim]="revealed() && chosen() !== false"
+      (click)="pick(false)"
+      [disabled]="revealed()"
+      @btnIn>
+
+      <div class="tf-symbol">
+        <div class="crossmark"></div>
+      </div>
+
+      <span class="tf-label">FALSO</span>
+
+      @if (revealed() && chosen() === false) {
+        <div class="tf-verdict" @resultBoom>
+          @if (isCorrectChoice(false)) {
+            <div class="verdict-check"></div>
+          } @else {
+            <div class="verdict-cross"></div>
+          }
+        </div>
+      }
+    </button>
+
+  </div>
+
+</div>

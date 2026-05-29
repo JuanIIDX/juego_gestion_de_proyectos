@@ -1,0 +1,62 @@
+<div class="board-screen">
+  <!-- Background -->
+  <div class="bg-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="layout">
+    <!-- Board -->
+    <div class="board-wrapper" @boardAppear>
+      <div class="board">
+        @for (tile of tiles; track tile.index) {
+          <div class="tile"
+            [class]="'tile-' + tile.type"
+            [style.grid-row]="tileRow(tile.index) + 1"
+            [style.grid-column]="tileCol(tile.index) + 1">
+
+            <!-- Tile number -->
+            <span class="tile-num">{{ tile.index + 1 }}</span>
+
+            <!-- Special icon -->
+            @if (tile.icon) {
+              <span class="tile-icon">{{ tile.icon }}</span>
+            }
+
+            <!-- Tokens -->
+            <div class="tokens">
+              @if (showPlacement()) {
+                @for (char of getCharactersOnTile(tile.index); track char.id) {
+                  <div class="token" @tokenDrop
+                    [style.background]="char.color"
+                    [title]="char.name">
+                    {{ char.emoji }}
+                    <div class="token-shine"></div>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Character list sidebar -->
+    <div class="sidebar">
+      <h3>Héroes en el mapa</h3>
+      <div class="hero-list">
+        @for (char of gameState.characters(); track char.id) {
+          <div class="hero-item" [style.--c]="char.color">
+            <div class="hero-token" [style.background]="char.color">{{ char.emoji }}</div>
+            <div class="hero-info">
+              <span class="hero-name">{{ char.name }}</span>
+              <span class="hero-pos">Casilla {{ (char.boardIndex ?? 0) + 1 }}</span>
+            </div>
+            <div class="hero-bar">
+              <div class="hero-bar-fill" [style.width.%]="((char.boardIndex ?? 0) / 35) * 100" [style.background]="char.color"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

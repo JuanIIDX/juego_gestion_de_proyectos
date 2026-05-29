@@ -1,0 +1,265 @@
+<div class="quiz-screen">
+
+  <!-- ══════════════════════════════════════
+       HEADER
+  ══════════════════════════════════════ -->
+  <div class="quiz-header">
+    <div class="header-corner header-corner--left">
+      <span class="corner-deco">✦</span>
+      <span class="header-label">Pregunta</span>
+      <span class="header-num">{{ currentIndex() + 1 }}</span>
+      <span class="header-label">de {{ totalQuestions }}</span>
+    </div>
+
+    <div class="header-center">
+      <span class="header-tag">Gestión de Mercados</span>
+      <button class="ctx-btn" (click)="showContext.set(true); $event.stopPropagation()">
+        📖 Ver contexto
+      </button>
+    </div>
+
+    <div class="header-corner header-corner--right">
+      <span class="header-label">Aciertos</span>
+      <span class="header-num">
+        {{ results().length > 0 ? ((correctCount() / results().length) * 100 | number:'1.0-0') : '?' }}
+      </span>
+      <span class="header-label">%</span>
+      <span class="corner-deco">✦</span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       CAJA DE PREGUNTA
+  ══════════════════════════════════════ -->
+  @if (phase() === 'question' || phase() === 'reveal') {
+    <div class="question-box" @questionEnter>
+      <div class="question-inner">
+        <p class="question-text">{{ displayedQuestion() }}<span class="q-cursor" [class.q-cursor--visible]="isTypingQuestion()">▌</span></p>
+      </div>
+      <div class="question-dots">
+        @for (q of questions; track q.id; let i = $index) {
+          <div class="q-dot"
+            [class.q-dot--active]="i === currentIndex()"
+            [class.q-dot--done]="i < currentIndex()">
+          </div>
+        }
+      </div>
+
+      <!-- Timer anclado en la esquina inferior izquierda del recuadro -->
+      <div class="timer-wrap" [class.timer-danger]="timerValue() <= 5">
+        <svg class="timer-svg" viewBox="0 0 80 80">
+          <!-- Fondo sólido del círculo -->
+          <circle cx="40" cy="40" r="38" fill="#0a0c14"/>
+          <circle cx="40" cy="40" r="38"
+            fill="none" stroke="rgba(201,162,39,0.25)" stroke-width="1.5"/>
+
+          <!-- Track exterior (progreso total) -->
+          <circle cx="40" cy="40" r="34"
+            fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>
+
+          <!-- Barra de progreso principal (cuenta atrás) -->
+          <circle cx="40" cy="40" r="34"
+            fill="none"
+            [attr.stroke]="timerColor()"
+            stroke-width="5"
+            stroke-linecap="round"
+            [attr.stroke-dasharray]="timerDash()"
+            stroke-dashoffset="0"
+            transform="rotate(-90 40 40)"
+            style="transition: stroke-dasharray 1s linear, stroke 0.5s"/>
+
+          <!-- Barra interior que gira 360° cada segundo -->
+          <circle cx="40" cy="40" r="22"
+            fill="none"
+            [attr.stroke]="timerColor()"
+            stroke-width="3"
+            stroke-linecap="round"
+            stroke-dasharray="12 126"
+            stroke-dashoffset="0"
+            class="timer-tick"
+            transform="rotate(-90 40 40)"/>
+
+          <!-- Número -->
+          <text x="40" y="45" text-anchor="middle"
+            class="timer-text" [attr.fill]="timerColor()">
+            {{ timerValue() }}
+          </text>
+        </svg>
+      </div>
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════
+       CHIPS pegados justo debajo del recuadro
+  ══════════════════════════════════════ -->
+
+  <!-- ══════════════════════════════════════
+       OVERLAY O / X
+  ══════════════════════════════════════ -->
+  @if (showResult()) {
+    <div class="result-overlay" @resultPop>
+      @if (lastCorrect()) {
+        <div class="result-symbol result-symbol--correct">✓</div>
+      } @else {
+        <div class="result-symbol result-symbol--wrong">✕</div>
+      }
+    </div>
+  }
+
+  <!-- ══════════════════════════════════════
+       CHIPS DE HISTORIAL
+  ══════════════════════════════════════ -->
+  <div class="results-bar">
+    @for (r of results(); track r.questionId) {
+      <div class="result-chip"
+        [class.chip--correct]="r.correct"
+        [class.chip--wrong]="!r.correct"
+        @chipEnter>
+        <span class="chip-symbol">{{ r.correct ? '✓' : '✕' }}</span>
+      </div>
+    }
+    @for (i of emptySlots(); track i) {
+      <div class="result-chip chip--empty"></div>
+    }
+  </div>
+
+  <!-- ══════════════════════════════════════
+       ÁREA DE INTERACCIÓN SEGÚN MODO
+  ══════════════════════════════════════ -->
+  <div class="mode-area">
+    @if (phase() === 'question') {
+
+      @if (currentQuestion().mode === 'classic') {
+        <div class="action-row" @fadeIn>
+          <button class="action-btn btn-wrong"   (click)="registerAnswer(false)">✕ Incorrecto</button>
+          <button class="action-btn btn-random"  (click)="randomAnswer()">🎲 Aleatorio</button>
+          <button class="action-btn btn-correct" (click)="registerAnswer(true)">○ Correcto</button>
+        </div>
+      }
+
+      @if (currentQuestion().mode === 'sort') {
+        <app-quiz-mode-a
+          [question]="currentQuestion()"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+      @if (currentQuestion().mode === 'match') {
+        <app-quiz-mode-b
+          [question]="currentQuestion()"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+      @if (currentQuestion().mode === 'order') {
+        <app-quiz-mode-c
+          [question]="currentQuestion()"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+      @if (currentQuestion().mode === 'choice') {
+        <app-quiz-mode-d
+          [question]="currentQuestion()"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+      @if (currentQuestion().mode === 'truefalse') {
+        <app-quiz-mode-e
+          [question]="currentQuestion()"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+      @if (currentQuestion().mode === 'sort3') {
+        <app-quiz-mode-a
+          [question]="currentQuestion()"
+          [triple]="true"
+          (answered)="registerAnswer($event)"
+          @fadeIn />
+      }
+
+    }
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PERSONAJE VERDE + BURBUJA
+  ══════════════════════════════════════ -->
+  <div class="announcer-bar" @announcerPop>
+
+    <!-- Burbuja del comentarista -->
+    <div class="announcer-bubble-wrap">
+      @switch (commentKey()) {
+        @case (0)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (1)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (2)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (3)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (4)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (5)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (6)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (7)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (8)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (9)  { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+        @case (10) { <div class="announcer-bubble" @commentSwap>{{ comment() }}<div class="bubble-tail-right"></div></div> }
+      }
+    </div>
+
+    <!-- Cuadrado verde -->
+    <div class="announcer-square"
+      [class.announcer--correct]="lastCorrect() === true"
+      [class.announcer--wrong]="lastCorrect() === false">
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════
+       PANTALLA FINAL
+  ══════════════════════════════════════ -->
+  <!-- ══════════════════════════════════════
+       MODAL DE CONTEXTO
+  ══════════════════════════════════════ -->
+  @if (showContext()) {
+    <div class="ctx-backdrop" (click)="showContext.set(false)">
+      <div class="ctx-modal" @contextModal (click)="$event.stopPropagation()">
+        <button class="ctx-close" (click)="showContext.set(false)">✕</button>
+        <div class="ctx-header">
+          <h2 class="ctx-title">{{ levelTitle || 'Contexto del nivel' }}</h2>
+        </div>
+        <div class="ctx-body-text">
+          <p>{{ levelContext || 'No hay contexto disponible para este nivel.' }}</p>
+        </div>
+      </div>
+    </div>
+  }
+
+  @if (phase() === 'finished') {
+    <div class="finished-overlay" @finishedEnter>
+      <div class="finished-box">
+        <div class="finished-title">¡Quiz completado!</div>
+        <div class="finished-score">
+          <span class="score-correct">{{ correctCount() }}</span>
+          <span class="score-sep">/</span>
+          <span class="score-total">{{ totalQuestions }}</span>
+        </div>
+        <div class="finished-chips">
+          @for (r of results(); track r.questionId) {
+            <div class="result-chip"
+              [class.chip--correct]="r.correct"
+              [class.chip--wrong]="!r.correct">
+              <span class="chip-symbol">{{ r.correct ? '✓' : '✕' }}</span>
+            </div>
+          }
+        </div>
+        <div class="finished-label">
+          @if (correctCount() === totalQuestions) { ¡Perfecto! 🏆 }
+          @else if (correctCount() >= totalQuestions / 2) { ¡Buen trabajo! 🌟 }
+          @else { ¡Sigue practicando! 💪 }
+        </div>
+        <div class="finished-comment">{{ comment() }}</div>
+        <button class="exit-btn" (click)="exit.emit()">Volver al menú</button>
+      </div>
+    </div>
+  }
+
+</div>

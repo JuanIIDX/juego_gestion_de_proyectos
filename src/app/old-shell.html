@@ -1,0 +1,10 @@
+<div class="app-container" [@screenSlide]="gameState.screen()">
+  @switch (gameState.screen()) {
+    @case ('welcome') {
+      <app-welcome />
+    }
+    @case ('intro') {
+      <app-intro />
+    }
+  }
+</div>

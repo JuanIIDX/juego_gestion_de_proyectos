@@ -1,0 +1,71 @@
+<div class="select-screen">
+  <!-- Background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <div class="container">
+    <header @headerAnim>
+      <button class="back-btn" (click)="gameState.goToWelcome()">← Volver</button>
+      <h2>Selección de Héroes</h2>
+      <p class="hint">Elige tus guerreros para la batalla</p>
+    </header>
+
+    <div class="characters-grid" [@listStagger]="gameState.characters().length">
+      @for (char of gameState.characters(); track char.id) {
+        <div class="char-card"
+          @cardEnter
+          [class.selected]="selectedId() === char.id"
+          [style.--char-color]="char.color"
+          (click)="select(char.id)">
+
+          <!-- Remove button -->
+          @if (canRemove()) {
+            <button class="remove-btn" (click)="remove(char.id, $event)" title="Eliminar">✕</button>
+          }
+
+          <!-- Character avatar -->
+          <div class="avatar">
+            <div class="avatar-square" [style.background]="char.color">
+              <span class="avatar-emoji">{{ char.emoji }}</span>
+              <div class="avatar-shine"></div>
+            </div>
+            <div class="avatar-shadow" [style.background]="char.color"></div>
+          </div>
+
+          <div class="char-info">
+            <span class="char-name">{{ char.name }}</span>
+            <div class="char-dots">
+              <span class="dot" [style.background]="char.color"></span>
+              <span class="dot" [style.background]="char.color" style="opacity:0.6"></span>
+              <span class="dot" [style.background]="char.color" style="opacity:0.3"></span>
+            </div>
+          </div>
+
+          @if (selectedId() === char.id) {
+            <div class="selected-badge">✓</div>
+          }
+        </div>
+      }
+
+      <!-- Add character card -->
+      @if (canAdd()) {
+        <div class="char-card add-card" @cardEnter (click)="add()">
+          <div class="add-icon">+</div>
+          <span class="add-label">Agregar Héroe</span>
+          <span class="add-count">{{ gameState.characters().length }}/10</span>
+        </div>
+      }
+    </div>
+
+    <div class="actions">
+      <div class="count-badge">
+        <span class="count-num">{{ gameState.characters().length }}</span>
+        <span class="count-label">héroes listos</span>
+      </div>
+      <button class="play-btn" (click)="startGame()">
+        <span class="play-glow"></span>
+        <span>⚔️ ¡A Batalla!</span>
+      </button>
+    </div>
+  </div>
+</div>

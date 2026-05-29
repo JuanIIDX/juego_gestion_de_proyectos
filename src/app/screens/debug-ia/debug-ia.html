@@ -1,0 +1,132 @@
+<div class="debug-page">
+  <h1 class="debug-title">🛠 Debug — Integración Gemini</h1>
+
+  <!-- ══ SECCIÓN 1: Conexión ══ -->
+  <section class="debug-section">
+    <h2>1. Test de conexión</h2>
+    <p class="debug-desc">Verifica que la API key esté bien configurada y que Gemini responda.</p>
+
+    <button class="dbg-btn"
+      [disabled]="connState() === 'loading'"
+      (click)="testConnection()">
+      @if (connState() === 'loading') { ⏳ Conectando... }
+      @else { 🔌 Probar conexión }
+    </button>
+
+    @if (connState() === 'ok') {
+      <div class="dbg-result ok">✅ {{ connResult() }}</div>
+    }
+    @if (connState() === 'error') {
+      <div class="dbg-result error">❌ {{ connResult() }}</div>
+    }
+  </section>
+
+  <!-- ══ SECCIÓN 2: List Models ══ -->
+  <section class="debug-section">
+    <h2>2. Modelos disponibles</h2>
+    <p class="debug-desc">Lista todos los modelos de tu API key y qué métodos soporta cada uno.</p>
+
+    <div class="models-toolbar">
+      <button class="dbg-btn"
+        [disabled]="modelsState() === 'loading'"
+        (click)="listModels()">
+        @if (modelsState() === 'loading') { ⏳ Cargando... }
+        @else { 📋 Listar modelos }
+      </button>
+
+      @if (modelsState() === 'ok') {
+        <input class="models-filter-input"
+          placeholder="Filtrar por método (ej: generateContent)"
+          [value]="modelsFilter()"
+          (input)="modelsFilter.set($any($event.target).value)" />
+        <span class="models-count">{{ filteredModels().length }} modelos</span>
+      }
+    </div>
+
+    @if (modelsState() === 'error') {
+      <div class="dbg-result error">❌ {{ modelsError() }}</div>
+    }
+
+    @if (modelsState() === 'ok') {
+      <div class="models-table-wrap">
+        <table class="models-table">
+          <thead>
+            <tr>
+              <th>Nombre (para la URL)</th>
+              <th>Display name</th>
+              <th>Métodos soportados</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (m of filteredModels(); track m.name) {
+              <tr>
+                <td class="model-id">{{ m.name }}</td>
+                <td>{{ m.displayName }}</td>
+                <td>
+                  @for (method of m.supportedMethods; track method) {
+                    <span class="method-badge"
+                      [class.method-generate]="method === 'generateContent'">
+                      {{ method }}
+                    </span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <!-- ══ SECCIÓN 3: Evaluación ══ -->
+  <section class="debug-section">
+    <h2>3. Test de evaluación</h2>
+    <p class="debug-desc">
+      Simula una ronda real: escribe una respuesta para cada equipo y deja que Gemini decida quién ganó.
+    </p>
+
+    <div class="dbg-field">
+      <label>Título del caso</label>
+      <input [(ngModel)]="topicTitle" />
+    </div>
+
+    <div class="dbg-field">
+      <label>Descripción del caso</label>
+      <textarea [(ngModel)]="topicDescription" rows="4"></textarea>
+    </div>
+
+    <div class="dbg-answers">
+      <div class="dbg-field">
+        <label>Respuesta — Equipo Izquierdo</label>
+        <textarea [(ngModel)]="answerLeft" rows="5" placeholder="Escribe la respuesta del equipo izquierdo..."></textarea>
+      </div>
+      <div class="dbg-field">
+        <label>Respuesta — Equipo Derecho</label>
+        <textarea [(ngModel)]="answerRight" rows="5" placeholder="Escribe la respuesta del equipo derecho..."></textarea>
+      </div>
+    </div>
+
+    <button class="dbg-btn"
+      [disabled]="evalState() === 'loading' || !answerLeft.trim() || !answerRight.trim()"
+      (click)="testEvaluate()">
+      @if (evalState() === 'loading') { ⏳ Evaluando... }
+      @else { 🤖 Evaluar con Gemini }
+    </button>
+
+    @if (evalState() === 'ok' && evalResult()) {
+      <div class="dbg-verdict">
+        <div class="verdict-winner"
+          [class.winner-left]="evalResult()!.winner === 'left'"
+          [class.winner-right]="evalResult()!.winner === 'right'">
+          🏆 Ganador:
+          @if (evalResult()!.winner === 'left') { Equipo Izquierdo }
+          @else { Equipo Derecho }
+        </div>
+        <div class="verdict-reason">{{ evalResult()!.reason }}</div>
+      </div>
+    }
+    @if (evalState() === 'error') {
+      <div class="dbg-result error">❌ {{ evalError() }}</div>
+    }
+  </section>
+</div>
