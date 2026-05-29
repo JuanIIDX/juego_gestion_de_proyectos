@@ -44,7 +44,8 @@
         <div class="option-row option-row--left" [style.animation-delay]="(i*80)+'ms'" @optionIn>
           <div class="opt-label opt-label--left"
             [class.opt-label--connected]="isLeftConnected(opt.id)"
-            (click)="removeConnection(opt.id)">
+            (click)="removeConnection(opt.id)"
+            (touchend)="removeConnection(opt.id); $event.preventDefault()">
             {{ opt.text }}
           </div>
           <div class="node node-left"
@@ -53,7 +54,8 @@
             [class.node--connected]="isLeftConnected(opt.id)"
             [class.node--correct]="revealed() && isConnectionCorrect(connectionForLeft(opt.id)!)"
             [class.node--wrong]="revealed() && connectionForLeft(opt.id) && !isConnectionCorrect(connectionForLeft(opt.id)!)"
-            (click)="selectLeft(opt.id)">
+            (click)="selectLeft(opt.id)"
+            (touchend)="selectLeft(opt.id); $event.preventDefault()">
             {{ opt.id }}
             @if (revealed() && connectionForLeft(opt.id)) {
               <span class="node-result" @resultPop>
@@ -76,12 +78,14 @@
             [attr.data-right]="opt.id"
             [class.node--connected]="isRightConnected(opt.id)"
             [class.node--target]="selectedLeft() !== null && !isRightConnected(opt.id)"
-            (click)="selectRight(opt.id)">
+            (click)="selectRight(opt.id)"
+            (touchend)="selectRight(opt.id); $event.preventDefault()">
             {{ opt.id }}
           </div>
           <div class="opt-label opt-label--right"
             [class.opt-label--connected]="isRightConnected(opt.id)"
-            (click)="selectRight(opt.id)">
+            (click)="selectRight(opt.id)"
+            (touchend)="selectRight(opt.id); $event.preventDefault()">
             {{ opt.text }}
           </div>
         </div>

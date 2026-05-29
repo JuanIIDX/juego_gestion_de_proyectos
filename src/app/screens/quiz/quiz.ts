@@ -868,6 +868,15 @@ export class Quiz implements OnInit, OnDestroy {
   @Output() exit = new EventEmitter<void>();
   @Output() spaceModeChange = new EventEmitter<'fast' | 'faster' | 'chaos'>();
 
+  isMobileLayout = signal(this.checkMobile());
+
+  private checkMobile(): boolean {
+    if (typeof window === 'undefined') return false;
+    return window.innerHeight <= 620 && window.innerWidth > window.innerHeight;
+  }
+
+  private resizeListener = () => this.isMobileLayout.set(this.checkMobile());
+
   get announcerImage(): string {
     return `images/thinking/${this.levelId}.png`;
   }
@@ -922,6 +931,7 @@ export class Quiz implements OnInit, OnDestroy {
   );
 
   ngOnInit() {
+    window.addEventListener('resize', this.resizeListener);
     this.questions = getQuestions(this.levelId);
     this.totalQuestions = this.questions.length;
     this.typeQuestion();
@@ -930,6 +940,7 @@ export class Quiz implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    window.removeEventListener('resize', this.resizeListener);
     this.clearTimer();
     this.clearTypeInterval();
     if (this.commentTimeout) clearTimeout(this.commentTimeout);

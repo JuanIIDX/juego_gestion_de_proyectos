@@ -35,7 +35,8 @@
   align-items: center;
   justify-content: flex-start;
   z-index: 50;
-  padding: 0 clamp(0.4rem, 1.5vw, 1.5rem) clamp(0.5rem, 2vh, 1.5rem);
+  /* Reservar 18vw a la derecha para el personaje, y arriba/abajo proporcional */
+  padding: clamp(0.3rem, 1vh, 0.8rem) clamp(18vw, 20vw, 220px) clamp(0.3rem, 1vh, 0.8rem) clamp(0.4rem, 1.5vw, 1.5rem);
   box-sizing: border-box;
   gap: clamp(0.15rem, 0.5vh, 0.3rem);
   pointer-events: all;
@@ -636,7 +637,7 @@
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  max-width: clamp(180px, 22vw, 320px);
+  width: clamp(140px, 18vw, 300px);
   pointer-events: none;
 }
 
@@ -682,7 +683,7 @@
 
 /* Personaje del nivel */
 .announcer-character {
-  width: clamp(70px, 18vh, 200px);
+  width: clamp(80px, 17vw, 200px);
   height: auto;
   object-fit: contain;
   object-position: bottom center;
@@ -727,19 +728,24 @@
    LANDSCAPE MÓVIL
    Reposiciona timer, personaje y burbuja
 ═══════════════════════════════════════ */
-@media (max-height: 620px) and (orientation: landscape) {
+/* Timer mobile — esquina inferior izquierda del quiz-screen */
+.timer-wrap--mobile {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  --timer-size: clamp(52px, 10vh, 70px);
+  width: var(--timer-size);
+  height: var(--timer-size);
+  z-index: 10;
+  filter: drop-shadow(0 0 10px rgba(34,211,238,0.4));
 
-  /* Timer: posición absoluta respecto al quiz-screen (inset: 0) */
-  .timer-wrap {
-    position: absolute !important;
-    left: 10px !important;
-    bottom: 10px !important;
-    top: auto !important;
-    right: auto !important;
-    --timer-size: clamp(52px, 10vh, 70px);
-    width: var(--timer-size) !important;
-    height: var(--timer-size) !important;
+  &.timer-danger {
+    filter: drop-shadow(0 0 18px rgba(239,68,68,0.9));
+    animation: timer-shake 0.25s linear infinite;
   }
+}
+
+@media (max-height: 620px) and (orientation: landscape) {
 
   /* Personaje más grande */
   .announcer-character {

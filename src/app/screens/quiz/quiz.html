@@ -30,6 +30,24 @@
   <!-- ══════════════════════════════════════
        CAJA DE PREGUNTA
   ══════════════════════════════════════ -->
+  <!-- Timer en esquina inferior izquierda SOLO en mobile landscape -->
+  @if (isMobileLayout() && (phase() === 'question' || phase() === 'reveal')) {
+    <div class="timer-wrap timer-wrap--mobile" [class.timer-danger]="timerValue() <= 5">
+      <svg class="timer-svg" viewBox="0 0 80 80">
+        <circle cx="40" cy="40" r="38" fill="#0a0c14"/>
+        <circle cx="40" cy="40" r="38" fill="none" stroke="rgba(201,162,39,0.25)" stroke-width="1.5"/>
+        <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>
+        <circle cx="40" cy="40" r="34" fill="none" [attr.stroke]="timerColor()" stroke-width="5"
+          stroke-linecap="round" [attr.stroke-dasharray]="timerDash()" stroke-dashoffset="0"
+          transform="rotate(-90 40 40)" style="transition: stroke-dasharray 1s linear, stroke 0.5s"/>
+        <circle cx="40" cy="40" r="22" fill="none" [attr.stroke]="timerColor()" stroke-width="3"
+          stroke-linecap="round" stroke-dasharray="12 126" stroke-dashoffset="0"
+          class="timer-tick" transform="rotate(-90 40 40)"/>
+        <text x="40" y="45" text-anchor="middle" class="timer-text" [attr.fill]="timerColor()">{{ timerValue() }}</text>
+      </svg>
+    </div>
+  }
+
   @if (phase() === 'question' || phase() === 'reveal') {
     <div class="question-box" @questionEnter>
       <div class="question-inner">
@@ -44,47 +62,23 @@
         }
       </div>
 
-      <!-- Timer anclado en la esquina inferior izquierda del recuadro -->
-      <div class="timer-wrap" [class.timer-danger]="timerValue() <= 5">
-        <svg class="timer-svg" viewBox="0 0 80 80">
-          <!-- Fondo sólido del círculo -->
-          <circle cx="40" cy="40" r="38" fill="#0a0c14"/>
-          <circle cx="40" cy="40" r="38"
-            fill="none" stroke="rgba(201,162,39,0.25)" stroke-width="1.5"/>
-
-          <!-- Track exterior (progreso total) -->
-          <circle cx="40" cy="40" r="34"
-            fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>
-
-          <!-- Barra de progreso principal (cuenta atrás) -->
-          <circle cx="40" cy="40" r="34"
-            fill="none"
-            [attr.stroke]="timerColor()"
-            stroke-width="5"
-            stroke-linecap="round"
-            [attr.stroke-dasharray]="timerDash()"
-            stroke-dashoffset="0"
-            transform="rotate(-90 40 40)"
-            style="transition: stroke-dasharray 1s linear, stroke 0.5s"/>
-
-          <!-- Barra interior que gira 360° cada segundo -->
-          <circle cx="40" cy="40" r="22"
-            fill="none"
-            [attr.stroke]="timerColor()"
-            stroke-width="3"
-            stroke-linecap="round"
-            stroke-dasharray="12 126"
-            stroke-dashoffset="0"
-            class="timer-tick"
-            transform="rotate(-90 40 40)"/>
-
-          <!-- Número -->
-          <text x="40" y="45" text-anchor="middle"
-            class="timer-text" [attr.fill]="timerColor()">
-            {{ timerValue() }}
-          </text>
-        </svg>
-      </div>
+      <!-- Timer dentro del recuadro SOLO en desktop -->
+      @if (!isMobileLayout()) {
+        <div class="timer-wrap" [class.timer-danger]="timerValue() <= 5">
+          <svg class="timer-svg" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="38" fill="#0a0c14"/>
+            <circle cx="40" cy="40" r="38" fill="none" stroke="rgba(201,162,39,0.25)" stroke-width="1.5"/>
+            <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="5"/>
+            <circle cx="40" cy="40" r="34" fill="none" [attr.stroke]="timerColor()" stroke-width="5"
+              stroke-linecap="round" [attr.stroke-dasharray]="timerDash()" stroke-dashoffset="0"
+              transform="rotate(-90 40 40)" style="transition: stroke-dasharray 1s linear, stroke 0.5s"/>
+            <circle cx="40" cy="40" r="22" fill="none" [attr.stroke]="timerColor()" stroke-width="3"
+              stroke-linecap="round" stroke-dasharray="12 126" stroke-dashoffset="0"
+              class="timer-tick" transform="rotate(-90 40 40)"/>
+            <text x="40" y="45" text-anchor="middle" class="timer-text" [attr.fill]="timerColor()">{{ timerValue() }}</text>
+          </svg>
+        </div>
+      }
     </div>
   }
 

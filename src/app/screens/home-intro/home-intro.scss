@@ -830,54 +830,33 @@
 ═══════════════════════════════════════ */
 @media (max-height: 620px) and (orientation: landscape) {
 
-  /* --- Fase saludo: personaje derecha fijo, burbuja a su izquierda --- */
-  .greeting-layout {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: flex-end;
-    padding: 0;
+  /* --- Fase saludo ---
+     Mismo layout que desktop (todo absoluto/centrado),
+     solo reducimos tamaños para que quepan */
+
+  /* Personaje más pequeño */
+  .announcer-center .character-img {
+    width: clamp(70px, 18vh, 140px);
   }
 
-  /* Personaje pegado abajo-derecha, igual que en desktop */
-  .announcer-center {
-    position: static;
-    transform: none;
-    flex-shrink: 0;
-    align-self: flex-end;
-  }
-
-  /* Burbuja: absoluta, anclada encima del personaje a la izquierda */
+  /* Burbuja más compacta y más arriba */
   .bubble-center {
-    position: absolute;
-    bottom: clamp(80px, 20vh, 140px); /* encima del personaje */
-    right: clamp(80px, 18vw, 160px);  /* alineada con el personaje */
-    left: unset;
-    transform: none;
-    width: clamp(200px, 45vw, 360px);
-    align-items: flex-end;
+    bottom: clamp(100px, 24vh, 200px);
+    width: min(480px, calc(100vw - 40px));
   }
 
-  /* Cola apunta hacia abajo-derecha (hacia el personaje) */
-  .tail-down {
-    align-self: flex-end;
-    margin-right: clamp(10px, 4vw, 30px);
-  }
-
-  .tap-hint {
-    position: absolute;
-    bottom: clamp(80px, 20vh, 140px);
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  /* Personaje más pequeño en landscape */
-  .greeting-layout .character-img {
-    width: clamp(80px, 18vh, 130px);
-  }
-
-  /* Texto de burbuja más compacto */
+  /* Texto más pequeño */
   .bubble-center .bubble-line {
-    font-size: clamp(0.9rem, 2.2vh, 1.3rem);
+    font-size: clamp(0.85rem, 2.2vh, 1.4rem);
+  }
+
+  .greeting-layout .speech-bubble {
+    padding: 0.7rem 1rem;
+  }
+
+  /* tap-hint más cerca */
+  .tap-hint {
+    bottom: clamp(70px, 15vh, 110px);
   }
 
   /* --- Fase selección de nivel --- */

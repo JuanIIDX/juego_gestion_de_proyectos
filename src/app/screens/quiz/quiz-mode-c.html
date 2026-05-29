@@ -7,7 +7,8 @@
         [class.slot--filled]="slot !== null"
         [class.slot--correct]="revealed() && isSlotCorrect(i)"
         [class.slot--wrong]="revealed() && slot !== null && !isSlotCorrect(i)"
-        (click)="clickSlot(i)">
+        (click)="clickSlot(i)"
+        (touchend)="clickSlot(i); $event.preventDefault()">
 
         @if (slot !== null) {
           <div class="slot-chip" @chipDrop>
@@ -36,6 +37,7 @@
     @for (opt of availableOptions(); track opt.id; let i = $index) {
       <div class="option-row"
         (click)="selectOption(opt.id)"
+        (touchend)="selectOption(opt.id); $event.preventDefault()"
         @optionIn>
         <div class="option-badge">{{ opt.id }}</div>
         <div class="option-label">{{ opt.text }}</div>
